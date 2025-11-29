@@ -1,0 +1,75 @@
+{
+    "slug": "parrilla-don-julio",
+    "name": "Parrilla Don Julio",
+    "image": "/images/don-julio/don-julio-logo.png",
+    "wifi": {
+        "name": "Wifi Don Julio",
+        "password": "DonJulio123"
+    },
+    "theme": {
+        "primary": "#CDAA5A",
+        "background": "#111111",
+        "text": "#FFFFFF"
+    },
+    "menu": [
+        {
+            "category": "Entradas",
+            "dishes": [
+                {
+                    "name": "Provoleta",
+                    "price": 12000,
+                    "image": "",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "Chorizo",
+                    "price": 5500,
+                    "image": "",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "Morcilla",
+                    "price": 5500,
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                }
+            ]
+        },
+        {
+            "category": "Carnes",
+            "dishes": [
+                {
+                    "name": "Bife de Chorizo",
+                    "price": 27000,
+                    "image": ""
+                },
+                {
+                    "name": "Ojo de Bife",
+                    "price": 29000,
+                    "image": ""
+                },
+                {
+                    "name": "Entraña",
+                    "price": 31000,
+                    "image": ""
+                }
+            ]
+        },
+        {
+            "category": "Postres",
+            "dishes": [
+                {
+                    "name": "Flan",
+                    "price": 7000,
+                    "image": "",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "Chocotorta",
+                    "price": 10000,
+                    "image": "",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,91 @@
+{
+    "slug": "mi-gusto",
+    "name": "Mi Gusto Empanadas",
+    "image": "/images/mi-gusto/mi-gusto.jpeg",
+    "wifi": {
+        "name": "Wifi Mi Gusto",
+        "password": "Empanadas789"
+    },
+    "theme": {
+        "primary": "#CDAA5A",
+        "background": "#111111",
+        "text": "#FFFFFF"
+    },
+    "menu": [
+        {
+            "category": "Empanadas",
+            "dishes": [
+                {
+                    "name": "Carne Cuchillo",
+                    "price": 4200,
+                    "image": "/images/mi-gusto/carne-cuchillo.jpeg",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "Vacío y Provoleta",
+                    "price": 4200,
+                    "image": "/images/mi-gusto/vacio-y-provo.jpeg",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "CheeseBurger",
+                    "price": 4200,
+                    "image": "/images/mi-gusto/cheesburger.jpeg",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "Carne Cuchillo Suave",
+                    "price": 4200,
+                    "image": "/images/mi-gusto/carne-cuchillo.jpeg",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "Vacío y Provoleta Premium",
+                    "price": 4200,
+                    "image": "/images/mi-gusto/vacio-y-provo.jpeg",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "CheeseBurger BK",
+                    "price": 4200,
+                    "image": "/images/mi-gusto/cheesburger.jpeg",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                }
+            ]
+        },
+        {
+            "category": "Postres",
+            "dishes": [
+                {
+                    "name": "Chocotorta",
+                    "price": 7500,
+                    "image": "/images/mi-gusto/chocotorta.webp",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                },
+                {
+                    "name": "Lemon Pie",
+                    "price": 7400,
+                    "image": "/images/mi-gusto/lemon-pie.webp",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
+                }
+            ]
+        },
+        {
+            "category": "Bebidas",
+            "dishes": [
+                {
+                    "name": "Coca Cola 600ml",
+                    "price": 2200,
+                    "image": "/images/mi-gusto/coca-cola.jpg",
+                    "description": "Botella de Coca Cola de 600ml."
+                },
+                {
+                    "name": "Heineken 437ml",
+                    "price": 2200,
+                    "image": "/images/mi-gusto/heineken.jpg",
+                    "description": "Lata de cerveza Heineken de 437ml."
+                }
+            ]
+        }
+    ]
+}
