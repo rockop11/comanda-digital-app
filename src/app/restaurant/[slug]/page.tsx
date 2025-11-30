@@ -4,6 +4,25 @@ import { getRestaurantData } from "@/lib/getRestaurantData";
 import { RestaurantHeader } from "@/components/RestaurantHeader/RestaurantHeader";
 import { RestaurantMenu } from "@/components/RestaurantMenu/RestaurantMenu";
 
+export async function generateMetadata({
+    params
+}: {
+    params: Promise<{ slug: string }>
+}) {
+    const { slug } = await params;
+
+    const restaurant: Restaurant = await getRestaurantData(slug);
+
+    if (!restaurant) return {};
+
+    const { name } = restaurant;
+
+    return {
+        title: `${name}`,
+        description: `Menu and details for ${slug}`
+    }
+}
+
 export default async function RestaurantPage(
     { params }: {
         params: Promise<{ slug: string }>
@@ -17,7 +36,7 @@ export default async function RestaurantPage(
     const { name, image, wifi, menu } = restaurant
 
     return (
-        <>
+        <div className='max-w-3xl mx-auto'>
             <RestaurantHeader
                 name={name}
                 image={image}
@@ -26,6 +45,6 @@ export default async function RestaurantPage(
             />
 
             <RestaurantMenu menu={menu} />
-        </>
+        </div>
     );
 }
