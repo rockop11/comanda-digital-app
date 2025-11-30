@@ -18,7 +18,7 @@
                 {
                     "name": "Provoleta",
                     "price": 12000,
-                    "image": "",
+                    "image": "/images/don-julio/provoleta.webp",
                     "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
                 },
                 {
@@ -40,17 +40,20 @@
                 {
                     "name": "Bife de Chorizo",
                     "price": 27000,
-                    "image": ""
+                    "image": "/images/don-julio/bife-chorizo.jpg",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
                 },
                 {
                     "name": "Ojo de Bife",
                     "price": 29000,
-                    "image": ""
+                    "image": "",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
                 },
                 {
                     "name": "Entraña",
                     "price": 31000,
-                    "image": ""
+                    "image": "",
+                    "description": "Lorem ipsum dolor sit amet consectetur adipiscing elit, etiam nunc vitae mi odio pretium quis orci, nisi porta potenti montes aenean feugiat. Quam laoreet pellentesque praesent magna, bibendum id primis."
                 }
             ]
         },
