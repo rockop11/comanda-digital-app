@@ -1,27 +1,38 @@
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  restaurantId: number;
+}
+
 export interface Dish {
   name: string;
   price: number;
-  image?: string;
-  description?: string;
+  image?: string | null;
+  description?: string | null;
 }
 
 export interface MenuCategory {
+  id: number;
   category: string;
   dishes: Dish[];
+  restaurantId: number;
 }
 
 export interface Restaurant {
+  id: number;
   slug: string;
   name: string;
   image: string;
+  wifiId: number;
+
   wifi: {
+    id: number;
     name: string;
     password: string;
+    restaurantId: number | null;
   };
-  theme: {
-    primary: string;
-    background: string;
-    text: string;
-  };
-  menu: MenuCategory[];
+  menuCategories: MenuCategory[];
+  users: User[];
 }

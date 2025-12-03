@@ -1,26 +1,49 @@
-import type { Restaurant } from "@/types";
+import type { Metadata } from "next/types";
 import { notFound } from "next/navigation";
-import { getRestaurantData } from "@/lib/getRestaurantData";
+import { getRestaurantData } from "@/services/restaurants";
 import { RestaurantHeader } from "@/components/RestaurantHeader/RestaurantHeader";
 import { RestaurantMenu } from "@/components/RestaurantMenu/RestaurantMenu";
+import prisma from "@/lib/prisma";
 
-export async function generateMetadata({
-    params
-}: {
-    params: Promise<{ slug: string }>
-}) {
-    const { slug } = await params;
+export const dynamicParams = true;
+interface RestaurantPageProps {
+    params: {
+        slug: string;
+    }
+}
 
-    const restaurant: Restaurant = await getRestaurantData(slug);
+export async function generateStaticParams() {
+    const restaurants = await prisma.restaurant.findMany({
+        select: {
+            slug: true,
+        },
+    });
 
-    if (!restaurant) return {};
+    return restaurants.map((restaurant) => ({
+        slug: restaurant.slug,
+    }));
+}
 
-    const { name } = restaurant;
+export async function generateMetadata({ params }: RestaurantPageProps): Promise<Metadata> {
+
+    const resolvedParams = await params;
+
+    const slug = resolvedParams.slug;
+
+    if (!slug || Array.isArray(slug)) {
+        return { title: 'Restaurante Digital' };
+    }
+
+    const restaurant = await getRestaurantData(slug);
+
+    if (!restaurant) {
+        return { title: 'Restaurante No Encontrado' };
+    }
 
     return {
-        title: `${name}`,
-        description: `Menu and details for ${slug}`
-    }
+        title: `${restaurant.name}`,
+        description: `Menú de ${restaurant.name}.`,
+    };
 }
 
 export default async function RestaurantPage(
@@ -28,12 +51,14 @@ export default async function RestaurantPage(
         params: Promise<{ slug: string }>
     }) {
     const { slug } = await params;
+    
+    const restaurant = await getRestaurantData(slug);
 
-    const restaurant: Restaurant = await getRestaurantData(slug);
+    if (!restaurant) {
+        notFound();
+    }
 
-    if (!restaurant) return notFound();
-
-    const { name, image, wifi, menu } = restaurant
+    const { name, image, wifi, menuCategories } = restaurant
 
     return (
         <div className='max-w-3xl mx-auto'>
@@ -44,7 +69,7 @@ export default async function RestaurantPage(
                 wifi_pass={wifi.password}
             />
 
-            <RestaurantMenu menu={menu} />
+            <RestaurantMenu menu={menuCategories} />
         </div>
     );
 }
