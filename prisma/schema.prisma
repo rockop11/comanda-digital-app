@@ -13,6 +13,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  SUPERADMIN
+  RESTAURANT_ADMIN
+}
+
 model Restaurant {
   id    Int    @id @default(autoincrement()) // ID de restaurante es Int
   slug  String @unique
@@ -49,9 +54,10 @@ model User {
   name     String
   email    String @unique
   password String
+  role     Role   @default(RESTAURANT_ADMIN)
 
-  restaurantId Int // Clave foránea Int
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int?
+  restaurant Restaurant? @relation(fields: [restaurantId], references: [id])
 }
 
 model Dish {
