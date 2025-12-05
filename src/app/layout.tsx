@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Providers as SessionProviders } from "@/components/SessionProvider/SessionProvider";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
@@ -23,7 +24,9 @@ export default function RootLayout({
       <body
         className={inter.className}
       >
-        {children}
+        <SessionProviders>
+          {children}
+        </SessionProviders>
         <Toaster position="top-center" />
       </body>
     </html>

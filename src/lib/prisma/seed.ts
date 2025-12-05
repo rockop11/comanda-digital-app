@@ -1,7 +1,7 @@
 // prisma/seed.ts
 
 // Asegúrate de que esta ruta sea correcta para tu proyecto
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 
 async function main() {
     console.log('--- Iniciando Seeding (Borrar y Crear) ---');
