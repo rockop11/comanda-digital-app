@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 
 export async function getRestaurantData(slug: string) {
     if (!slug) return null;

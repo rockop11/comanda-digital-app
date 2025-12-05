@@ -57,7 +57,9 @@ model User {
   role     Role   @default(RESTAURANT_ADMIN)
 
   restaurantId Int?
-  restaurant Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  accounts     Account[]
+  sessions     Session[]
 }
 
 model Dish {
@@ -69,4 +71,33 @@ model Dish {
 
   menuCategoryId Int
   menuCategory   MenuCategory @relation(fields: [menuCategoryId], references: [id])
+}
+
+model Account {
+  id     Int @id @default(autoincrement())
+  userId Int
+
+  type              String
+  provider          String
+  providerAccountId String
+
+  access_token  String?
+  refresh_token String?
+  expires_at    Int?
+  token_type    String?
+  scope         String?
+  id_token      String?
+  session_state String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

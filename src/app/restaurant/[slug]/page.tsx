@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getRestaurantData } from "@/services/restaurants";
 import { RestaurantHeader } from "@/components/RestaurantHeader/RestaurantHeader";
 import { RestaurantMenu } from "@/components/RestaurantMenu/RestaurantMenu";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export const dynamicParams = true;
 interface RestaurantPageProps {
@@ -51,7 +51,7 @@ export default async function RestaurantPage(
         params: Promise<{ slug: string }>
     }) {
     const { slug } = await params;
-    
+
     const restaurant = await getRestaurantData(slug);
 
     if (!restaurant) {
