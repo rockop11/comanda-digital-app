@@ -1,45 +1,47 @@
-// prisma/seed.ts
-
-// Asegúrate de que esta ruta sea correcta para tu proyecto
 import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcryptjs'
+import { Role } from '@/generated/prisma/enums';
 
 async function main() {
     console.log('--- Iniciando Seeding (Borrar y Crear) ---');
 
-    // 1. LIMPIEZA: BORRADO EN ORDEN INVERSO (Hijos antes que Padres)
-
-    // A. Borrar los 'nietos' (Platos)
     await prisma.dish.deleteMany();
 
-    // B. Borrar los 'hijos' (Categorías, Usuarios)
     await prisma.menuCategory.deleteMany();
     await prisma.user.deleteMany();
 
-    // C. Borrar los 'padres' (Restaurant y Wifi)
     await prisma.restaurant.deleteMany();
     await prisma.wifi.deleteMany();
 
     console.log('✅ Datos antiguos eliminados con éxito.');
 
+    const rawPasswordSuperAdmin = '' //COMPLETAR
+    const emailSuperAdmin = '' //COMPLETAR
+
+    const rawRestaurantPassword = '' //COMPLETAR
+    const emailRestaurantAdmin = '' //COMPLETAR
+
+    const hashedPasswordSuperAdmin = await bcrypt.hash(rawPasswordSuperAdmin, 10);
+    const hashedPasswordRestaurantAdmin = await bcrypt.hash(rawRestaurantPassword, 10);
+
+
     const superAdmin = await prisma.user.create({
         data: {
             name: "Super Administrator",
-            email: "superadmin@app.com",
-            password: "SuperAdminPassword",
-            role: 'SUPERADMIN',
+            email: emailSuperAdmin,
+            password: hashedPasswordSuperAdmin,
+            role: Role.SUPERADMIN,
         }
     })
 
     console.log(`✅ Usuario SuperAdmin creado: ${superAdmin.email}`)
 
-    // 2. INSERCIÓN: CREAR EL RESTAURANTE CON RELACIONES ANIDADAS
     const newRestaurant = await prisma.restaurant.create({
         data: {
             slug: "parrilla-don-julio",
             name: "Parrilla Don Julio",
             image: "/images/don-julio/don-julio-logo.png",
 
-            // Creación anidada de WIFI (Relación 1:1)
             wifi: {
                 create: {
                     name: "Wifi Don Julio",
@@ -47,20 +49,18 @@ async function main() {
                 },
             },
 
-            // Creación anidada del Usuario Administrador (Relación 1:N)
             users: {
                 create: {
                     name: "Admin Don Julio",
-                    email: "admin@donjulio.com",
-                    // ⚠️ ¡IMPORTANTE: Usar librería bcrypt para hashear esto en producción!
-                    password: "SuperSecretPassword123"
+                    email: emailRestaurantAdmin,
+                    password: hashedPasswordRestaurantAdmin,
+                    role: Role.RESTAURANT_ADMIN
                 }
             },
 
-            // Creación anidada de Categorías y Platos
             menuCategories: {
                 create: [
-                    { // Categoría: Entradas
+                    {
                         category: "Entradas",
                         dishes: {
                             create: [
@@ -70,7 +70,7 @@ async function main() {
                             ],
                         },
                     },
-                    { // Categoría: Carnes
+                    {
                         category: "Carnes",
                         dishes: {
                             create: [
@@ -80,7 +80,7 @@ async function main() {
                             ],
                         },
                     },
-                    { // Categoría: Postres
+                    {
                         category: "Postres",
                         dishes: {
                             create: [
@@ -103,6 +103,5 @@ main()
         process.exit(1);
     })
     .finally(async () => {
-        // Aseguramos que la conexión se cierre
         await prisma.$disconnect();
     });

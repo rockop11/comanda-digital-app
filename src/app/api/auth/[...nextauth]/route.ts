@@ -3,7 +3,7 @@ import type { Adapter } from "next-auth/adapters";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-// import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
 const authOptions: AuthOptions = {
@@ -27,11 +27,7 @@ const authOptions: AuthOptions = {
                     return null;
                 }
 
-                // B. Verificar la contraseña (Texto Plano - TEMPORAL)
-                // 💡 Esta es la parte que resuelve el fallo de autenticación.
-                const passwordMatch = credentials.password === user.password;
-
-                // En producción, usa: const passwordMatch = await bcrypt.compare(credentials.password, user.password);
+                const passwordMatch = await bcrypt.compare(credentials.password, user.password);
 
                 if (!passwordMatch) {
                     return null;
@@ -51,7 +47,6 @@ const authOptions: AuthOptions = {
     callbacks: {
         async jwt({ token, user }: { token: JWT, user: User }) {
             if (user) {
-                // Solo se ejecuta al hacer login (primera vez)
                 token.role = user.role;
                 token.restaurantId = user.restaurantId;
             }
