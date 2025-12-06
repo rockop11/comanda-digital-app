@@ -1,4 +1,3 @@
-// app/dashboard/page.tsx (o un componente hijo)
 'use client';
 
 import { useSession, signOut } from 'next-auth/react';
@@ -13,7 +12,6 @@ export default function DashboardPage() {
 
     const userName = session?.user?.name;
     const userRole = session?.user?.role as Role;
-    // const userRestaurantId = session?.user?.restaurantId;
 
     return (
         <div className="p-8">
@@ -27,7 +25,7 @@ export default function DashboardPage() {
                 <h1>Bienvenido {userName}</h1>
             )}
 
-            <button onClick={() => signOut()}>Cerrar Sesión</button>
+            <button onClick={() => signOut({ callbackUrl: '/'})}>Cerrar Sesión</button>
         </div>
     );
 }

@@ -6,7 +6,6 @@ interface CustomToken {
 }
 
 export default withAuth(
-    // 2. Tipamos la solicitud con NextRequestWithAuth
     function middleware(req: NextRequestWithAuth) {
 
         const token = req.nextauth.token as CustomToken | null;
