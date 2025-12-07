@@ -1,12 +1,12 @@
 "use client"
 import { JSX, useState, FormEvent, ChangeEvent } from "react"
-import { signIn } from 'next-auth/react'
-import { useRouter } from "next/navigation"
+import { signIn, getSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation';
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Spinner } from "../ui/spinner"
 import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip"
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react'
 
 interface CredentialsProps {
     email: string;
@@ -60,21 +60,30 @@ export const LoginForm = (): JSX.Element => {
         try {
             const result = await signIn('credentials', {
                 ...credentials,
-                redirect: false
+                redirect: false,
             })
 
             if (result?.error) {
                 setError('Credenciales inválidas. Verifica email y contraseña.');
-            } else if (result?.ok) {
-                router.push('/dashboard');
+                return
             }
+
+            const session = await getSession()
+
+            if (session && session.user.role === 'SUPERADMIN') {
+                router.push('/admin');
+            } else if (session && session.user.role === 'RESTAURANT_ADMIN') {
+                router.push('/dashboard');
+            } else {
+                router.push('/');
+            }
+
         } catch (err) {
             console.error('Error Crítico de Conexión o Sistema:', err);
             setError('Ocurrió un error inesperado. Intente de nuevo más tarde.');
         } finally {
             setIsLoading(false)
         }
-
     }
 
     return (
@@ -84,6 +93,7 @@ export const LoginForm = (): JSX.Element => {
                     placeholder="correo electronico"
                     name='email'
                     type='email'
+                    required
                     value={credentials.email}
                     onChange={handleChange}
                     className={`p-3 rounded-lg border ${getInputClasses()}`}
@@ -94,6 +104,7 @@ export const LoginForm = (): JSX.Element => {
                         name='password'
                         type={togglePassword ? 'text' : 'password'}
                         placeholder="Contraseña"
+                        required
                         value={credentials.password}
                         onChange={handleChange}
                         className={`p-3 rounded-lg border ${getInputClasses()}`}

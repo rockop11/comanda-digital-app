@@ -14,7 +14,7 @@ declare module "next-auth" {
 
   interface User extends DefaultUser {
     role: AppRole;
-    restaurantId: number | null; 
+    restaurantId: number | null;
   }
 }
 
