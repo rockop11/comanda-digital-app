@@ -11,7 +11,6 @@ export default withAuth(
         const token = req.nextauth.token as CustomToken | null;
         const path = req.nextUrl.pathname;
 
-        // 3. Verificación de Rol (Acceso a /admin)
         if (path.startsWith("/admin") && token?.role !== 'SUPERADMIN') {
             return NextResponse.json(
                 { message: 'No tienes permiso de Super Administrador.' },
