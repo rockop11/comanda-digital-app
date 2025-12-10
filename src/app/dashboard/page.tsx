@@ -19,12 +19,6 @@ export default function DashboardPage() {
 
             <p>Tu Rol: <strong>{userRole}</strong></p>
 
-            {userRole === 'SUPERADMIN' ? (
-                <h1>Buenvenido {userName}</h1>
-            ) : (
-                <h1>Bienvenido {userName}</h1>
-            )}
-
             <button onClick={() => signOut({ callbackUrl: '/'})}>Cerrar Sesión</button>
         </div>
     );

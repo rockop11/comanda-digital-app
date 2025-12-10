@@ -1,3 +1,4 @@
+import { Restaurant } from '@/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
 
 export async function getRestaurantData(slug: string) {
@@ -16,4 +17,16 @@ export async function getRestaurantData(slug: string) {
     })
 
     return restaurant;
+}
+
+export async function getRestaurantList(): Promise<Restaurant[]> {
+    try {
+        const restaurantList = await prisma.restaurant.findMany()
+
+        return restaurantList
+    } catch (error) {
+        console.log({ error })
+
+        return []
+    }
 }
