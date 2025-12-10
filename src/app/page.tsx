@@ -1,8 +1,10 @@
-
+import { LoginButton } from "@/components/LoginButton/LoginButton";
 export default function Home() {
   return (
     <>
-      Comanda digital
+      <h1>Comanda Digital App</h1>
+
+      <LoginButton />
     </>
   );
 }
