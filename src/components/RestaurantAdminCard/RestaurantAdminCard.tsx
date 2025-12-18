@@ -1,22 +1,55 @@
 'use client'
-import { RestaurantPayload } from "@/services/restaurants"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
-import { Wifi, Lock } from "lucide-react"
+import { RestaurantPayload } from "@/services/restaurants"
+import { CreateRestaurantCategory } from "../CreateRestaurantCategory/CreateRestaurantCategory"
+import { Wifi, Lock, Trash2 } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { Button } from "../ui/button"
-import { CreateRestaurantCategory } from "../CreateRestaurantCategory/CreateRestaurantCategory"
+import { DeleteCategoryModal } from "../DeleteCategoryModal/DeleteCategoryModal"
 
 export const RestaurantAdminCard = ({ name, image, menuCategories, wifi, id }: RestaurantPayload) => {
 
     const [showAddNewCategory, setShowAddNewCategory] = useState<boolean>(false)
+    const [open, setOpen] = useState<boolean>(false)
+    const [categoryToDelete, setCategoryToDelete] = useState<{
+        id: number;
+        name: string;
+        dishesCount: number;
+    } | null>(null);
 
     const showAddNewCategoryHandler = () => {
         setShowAddNewCategory(prevState => !prevState)
     }
 
+    const closeModalHandler = () => {
+        setOpen(false)
+        setCategoryToDelete(null)
+    }
+
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = 'hidden';
+        }
+
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [open]);
+
     return (
         <>
+            {open && categoryToDelete && (
+                <DeleteCategoryModal
+                    open
+                    categoryId={categoryToDelete.id}
+                    restaurantId={id}
+                    categoryName={categoryToDelete.name}
+                    dishesCount={categoryToDelete?.dishesCount}
+                    onClose={closeModalHandler}
+                />
+            )}
+
             <div className="flex items-center gap-4 p-4 rounded-xl bg-white shadow-sm w-full">
                 <div className="shrink-0">
                     <Image
@@ -44,29 +77,51 @@ export const RestaurantAdminCard = ({ name, image, menuCategories, wifi, id }: R
             </div>
 
             <div className="p-4">
-                <Button 
+                <Button
                     className="cursor-pointer"
                     onClick={showAddNewCategoryHandler}>
-                        {showAddNewCategory ? 'Ocultar' : 'Crear Categoria'}
-                        
-                        </Button>
+                    {showAddNewCategory ? 'Ocultar' : 'Crear Categoria'}
+
+                </Button>
 
                 {showAddNewCategory && (
-                    <CreateRestaurantCategory restaurantId={id}/>
+                    <CreateRestaurantCategory restaurantId={id} />
                 )}
 
-                {menuCategories.map(({ category, dishes }, i) => (
+                {menuCategories.map(({ category, dishes, id }, i) => (
                     <Accordion
                         key={category + i}
                         type="multiple"
                     >
                         <AccordionItem value={`item-${i}`}>
-                            <AccordionTrigger className="text-2xl font-semibold">
-                                {category}
+                            <AccordionTrigger className="w-full px-0">
+                                <div className="flex w-full items-center justify-between">
+                                    <span className="text-2xl font-semibold">
+                                        {category}
+                                    </span>
+
+                                    <div
+                                        role="button"
+                                        tabIndex={0}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setOpen(true)
+                                            setCategoryToDelete({
+                                                id,
+                                                name: category,
+                                                dishesCount: dishes.length
+                                            })
+                                        }}
+                                        className="ml-4 cursor-pointer text-red-500 hover:text-red-700"
+                                    >
+                                        <Trash2 size={18} />
+                                    </div>
+                                </div>
                             </AccordionTrigger>
 
                             <AccordionContent>
                                 <div className="flex flex-col gap-4 mt-4">
+
                                     {dishes.map(({ name, description, id, price, image }) => (
                                         <div
                                             key={id}

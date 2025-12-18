@@ -64,7 +64,7 @@ model Dish {
   description String?
 
   menuCategoryId Int
-  menuCategory   MenuCategory @relation(fields: [menuCategoryId], references: [id])
+  menuCategory   MenuCategory @relation(fields: [menuCategoryId], references: [id], onDelete: Cascade)
 }
 
 model Account {
