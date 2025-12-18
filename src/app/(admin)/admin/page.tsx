@@ -1,5 +1,5 @@
 
-import { AdminPage } from "@/components/AdminPage/AdminPage"
+import { SuperAdminPage } from "@/components/SuperAdminPage/SuperAdminPage"
 import { getRestaurantList } from "@/services/restaurants"
 
 export default async function AdminIndexPage() {
@@ -7,6 +7,6 @@ export default async function AdminIndexPage() {
     const restaurants = await getRestaurantList()
 
     return (
-        <AdminPage restaurants={restaurants}/>
+        <SuperAdminPage restaurants={restaurants}/>
     )
 }

@@ -10,7 +10,7 @@ interface AdminPageProps {
     restaurants: Restaurant[]
 }
 
-export const AdminPage = ({ restaurants }: AdminPageProps): JSX.Element => {
+export const SuperAdminPage = ({ restaurants }: AdminPageProps): JSX.Element => {
     const { data: session, status } = useSession()
     const router = useRouter()
 
