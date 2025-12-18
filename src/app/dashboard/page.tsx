@@ -1,25 +1,24 @@
-'use client';
+import { RestaurantAdminPage } from '@/components/RestaurantAdminPage/RestaurantAdminPage';
+import { getRestaurantDataByUser } from '@/services/restaurants';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
-import { useSession, signOut } from 'next-auth/react';
-import { Role } from '@/generated/prisma/client';
+export default async function DashboardPage() {
+    const session = await getServerSession(authOptions);
 
-export default function DashboardPage() {
-    const { data: session, status } = useSession();
-
-    if (status === 'loading') {
-        return <div>Cargando sesión...</div>;
+    if (!session) {
+        return
     }
 
-    const userName = session?.user?.name;
-    const userRole = session?.user?.role as Role;
+    const parsedId = parseInt(session?.user.id)
+
+    const restaurant = await getRestaurantDataByUser(parsedId)
+
+    if (!restaurant) {
+        return null
+    }
 
     return (
-        <div className="p-8">
-            <h1>Bienvenido al Dashboard, {userName}!</h1>
-
-            <p>Tu Rol: <strong>{userRole}</strong></p>
-
-            <button onClick={() => signOut({ callbackUrl: '/'})}>Cerrar Sesión</button>
-        </div>
+        <RestaurantAdminPage restaurant={restaurant} />
     );
 }
