@@ -3,19 +3,22 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { RestaurantPayload } from "@/services/restaurants"
 import { CreateRestaurantCategory } from "../CreateRestaurantCategory/CreateRestaurantCategory"
-import { Wifi, Lock, Trash2 } from "lucide-react"
+import { Wifi, Lock, Trash2, Pen } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { Button } from "../ui/button"
-import { DeleteCategoryModal } from "../DeleteCategoryModal/DeleteCategoryModal"
+import { CategoryModal } from "../CategoryModal/CategoryModal"
+
+type ActionTypeModalProps = 'EDIT' | 'DELETE' | null
 
 export const RestaurantAdminCard = ({ name, image, menuCategories, wifi, id }: RestaurantPayload) => {
 
     const [showAddNewCategory, setShowAddNewCategory] = useState<boolean>(false)
     const [open, setOpen] = useState<boolean>(false)
-    const [categoryToDelete, setCategoryToDelete] = useState<{
+    const [actionModalType, setActionModalType] = useState<ActionTypeModalProps>(null)
+    const [categorySelected, setCategorySelected] = useState<{
         id: number;
         name: string;
-        dishesCount: number;
+        dishesCount?: number;
     } | null>(null);
 
     const showAddNewCategoryHandler = () => {
@@ -24,7 +27,7 @@ export const RestaurantAdminCard = ({ name, image, menuCategories, wifi, id }: R
 
     const closeModalHandler = () => {
         setOpen(false)
-        setCategoryToDelete(null)
+        setCategorySelected(null)
     }
 
     useEffect(() => {
@@ -39,13 +42,14 @@ export const RestaurantAdminCard = ({ name, image, menuCategories, wifi, id }: R
 
     return (
         <>
-            {open && categoryToDelete && (
-                <DeleteCategoryModal
+            {open && actionModalType && categorySelected && (
+                <CategoryModal
                     open
-                    categoryId={categoryToDelete.id}
+                    categoryId={categorySelected.id}
                     restaurantId={id}
-                    categoryName={categoryToDelete.name}
-                    dishesCount={categoryToDelete?.dishesCount}
+                    categoryName={categorySelected.name}
+                    dishesCount={categorySelected?.dishesCount || 0}
+                    actionType={actionModalType}
                     onClose={closeModalHandler}
                 />
             )}
@@ -100,21 +104,42 @@ export const RestaurantAdminCard = ({ name, image, menuCategories, wifi, id }: R
                                         {category}
                                     </span>
 
-                                    <div
-                                        role="button"
-                                        tabIndex={0}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setOpen(true)
-                                            setCategoryToDelete({
-                                                id,
-                                                name: category,
-                                                dishesCount: dishes.length
-                                            })
-                                        }}
-                                        className="ml-4 cursor-pointer text-red-500 hover:text-red-700"
-                                    >
-                                        <Trash2 size={18} />
+                                    <div className="flex items-center">
+                                        <div
+                                            className="cursor-pointer"
+                                            role='button'
+                                            tabIndex={0}
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                setOpen(true)
+                                                setActionModalType('EDIT')
+                                                setCategorySelected({
+                                                    id,
+                                                    name: category,
+                                                })
+                                            }}
+                                        >
+                                            <Pen size={18} />
+                                        </div>
+
+                                        <div
+                                            role="button"
+                                            tabIndex={0}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setOpen(true)
+                                                setActionModalType('DELETE')
+                                                setCategorySelected({
+                                                    id,
+                                                    name: category,
+                                                    dishesCount: dishes.length
+                                                })
+                                            }}
+                                            className="ml-4 cursor-pointer text-red-500 hover:text-red-700"
+                                        >
+                                            <Trash2 size={18} />
+
+                                        </div>
                                     </div>
                                 </div>
                             </AccordionTrigger>
