@@ -12,9 +12,9 @@ import { Trash2, Pen } from "lucide-react"
 interface RestaurantMenuProps {
     menu: MenuCategory[];
     mode: 'ADMIN' | 'PUBLIC';
-    setOpen: (value: boolean) => void;
-    setActionModalType: (value: ActionTypeModalProps) => void;
-    setCategorySelected: (data: SetCategorySelectedProps | null) => void;
+    setOpen?: (value: boolean) => void;
+    setActionModalType?: (value: ActionTypeModalProps) => void;
+    setCategorySelected?: (data: SetCategorySelectedProps | null) => void;
 }
 
 export const RestaurantMenu = ({
@@ -37,7 +37,7 @@ export const RestaurantMenu = ({
                 >
                     <AccordionItem value={`item-${i}`}>
                         <AccordionTrigger className="text-2xl font-semibold">
-                            {isAdmin
+                            {isAdmin && setOpen && setActionModalType && setCategorySelected
                                 ? (<div className="flex w-full items-center justify-between">
                                     <span className="text-2xl font-semibold">
                                         {category}
