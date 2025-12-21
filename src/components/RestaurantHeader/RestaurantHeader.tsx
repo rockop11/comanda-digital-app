@@ -1,17 +1,21 @@
 'use client'
+import type { RestaurantHeaderProps } from "@/types";
+import { useState } from "react";
 import Image from "next/image";
+import { RestaurantEditNameForm } from "../RestaurantEditNameForm/RestaurantEditNameForm";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Copy, Wifi, Lock, Pen } from "lucide-react"
 import { toast } from 'react-hot-toast'
 
-interface RestaurantHeaderProps {
-    image: string;
-    name: string;
-    wifi_name: string;
-    wifi_pass: string;
-    mode: 'PUBLIC' | 'ADMIN'
+type FieldProps = 'NAME' | 'WIFI_NAME' | 'WIFI_PASS' | null
+
+interface EditFieldProps {
+    field: FieldProps;
+    edit: boolean;
 }
 
 export const RestaurantHeader = ({
+    restaurantId,
     image,
     name,
     wifi_name,
@@ -22,6 +26,11 @@ export const RestaurantHeader = ({
     const isPublic = mode === 'PUBLIC'
     const isAdmin = mode === 'ADMIN'
 
+    const [editField, setEditField] = useState<EditFieldProps>({
+        field: null,
+        edit: false
+    })
+
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(wifi_pass);
@@ -30,6 +39,13 @@ export const RestaurantHeader = ({
             toast.error('No se pudo copiar la contraseña')
         }
     };
+
+    const editFieldHandler = (field: FieldProps) => {
+        setEditField({
+            field: field,
+            edit: true
+        })
+    }
 
     return (
         <div className="flex items-center gap-4 p-4 rounded-xl bg-white shadow-sm w-full">
@@ -47,8 +63,26 @@ export const RestaurantHeader = ({
             <div className="flex flex-col gap-2">
                 {isAdmin
                     ? (<div className="flex gap-4 items-center">
-                        <h2 className="text-xl font-bold md:text-2xl">{name}</h2>
-                        <Pen size={18} />
+                        {editField.edit && editField.field === 'NAME' && restaurantId
+                            ? (<>
+                                <RestaurantEditNameForm
+                                    restaurantId={restaurantId}
+                                    restaurantName={name}
+                                    editFieldHandler={editFieldHandler}
+                                />
+                            </>)
+                            : (<>
+                                <h2 className="text-xl font-bold md:text-2xl">{name}</h2>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <Pen size={18} className="cursor-pointer" onClick={() => editFieldHandler('NAME')} />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Editar nombre
+                                    </TooltipContent>
+                                </Tooltip>
+                            </>)}
+
                     </div>)
                     : (<h2 className="text-xl font-bold md:text-2xl">{name}</h2>)
                 }

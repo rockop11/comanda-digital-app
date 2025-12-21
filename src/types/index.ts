@@ -40,7 +40,16 @@ export interface Restaurant {
 export type ActionTypeModalProps = 'EDIT' | 'DELETE' | null
 
 export interface SetCategorySelectedProps {
-    id: number,
-    name: string;
-    dishesCount?: number
+  id: number,
+  name: string;
+  dishesCount?: number
+}
+
+export interface RestaurantHeaderProps {
+  restaurantId?: number;
+  image: string;
+  name: string;
+  wifi_name: string;
+  wifi_pass: string;
+  mode: 'PUBLIC' | 'ADMIN'
 }
