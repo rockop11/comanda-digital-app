@@ -36,3 +36,11 @@ export interface Restaurant {
   menuCategories: MenuCategory[];
   users: User[];
 }
+
+export type ActionTypeModalProps = 'EDIT' | 'DELETE' | null
+
+export interface SetCategorySelectedProps {
+    id: number,
+    name: string;
+    dishesCount?: number
+}
