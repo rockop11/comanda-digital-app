@@ -59,6 +59,7 @@ export const RestaurantAdminCard = ({
                 name={name}
                 wifi_name={wifi.name}
                 wifi_pass={wifi.password}
+                restaurantId={id}
                 mode="ADMIN"
             />
 
