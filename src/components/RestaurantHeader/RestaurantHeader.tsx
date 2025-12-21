@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import { Copy, Wifi, Lock } from "lucide-react"
+import { Copy, Wifi, Lock, Pen } from "lucide-react"
 import { toast } from 'react-hot-toast'
 
 interface RestaurantHeaderProps {
@@ -8,9 +8,19 @@ interface RestaurantHeaderProps {
     name: string;
     wifi_name: string;
     wifi_pass: string;
+    mode: 'PUBLIC' | 'ADMIN'
 }
 
-export const RestaurantHeader = ({ image, name, wifi_name, wifi_pass }: RestaurantHeaderProps) => {
+export const RestaurantHeader = ({
+    image,
+    name,
+    wifi_name,
+    wifi_pass,
+    mode
+}: RestaurantHeaderProps) => {
+
+    const isPublic = mode === 'PUBLIC'
+    const isAdmin = mode === 'ADMIN'
 
     const handleCopy = async () => {
         try {
@@ -27,7 +37,7 @@ export const RestaurantHeader = ({ image, name, wifi_name, wifi_pass }: Restaura
             <div className="shrink-0">
                 <Image
                     src={image}
-                    alt={name}
+                    alt={`${name}-logo`}
                     width={100}
                     height={100}
                     className="rounded-sm object-cover md:w-[150px] md:h-[150px]"
@@ -35,19 +45,46 @@ export const RestaurantHeader = ({ image, name, wifi_name, wifi_pass }: Restaura
             </div>
 
             <div className="flex flex-col gap-2">
-                <h2 className="text-xl font-bold md:text-2xl">{name}</h2>
+                {isAdmin
+                    ? (<div className="flex gap-4 items-center">
+                        <h2 className="text-xl font-bold md:text-2xl">{name}</h2>
+                        <Pen size={18} />
+                    </div>)
+                    : (<h2 className="text-xl font-bold md:text-2xl">{name}</h2>)
+                }
 
                 <div className="flex items-center gap-2 text-sm md:text-base">
-                    <Wifi className="w-4 h-4" />
-                    <span className="font-normal">{wifi_name}</span>
+                    {isAdmin
+                        ? (<>
+                            <Wifi className="w-4 h-4" />
+                            <span className="font-normal">{wifi_name}</span>
+                            <div><Pen size={16} /></div>
+                        </>)
+                        : (<>
+                            <Wifi className="w-4 h-4" />
+                            <span className="font-normal">{wifi_name}</span>
+                        </>)
+                    }
                 </div>
 
                 <div className="flex items-center gap-2 text-sm md:text-base">
-                    <Lock className="w-4 h-4" />
-                    <span className="font-normal">{wifi_pass}</span>
-                    <button className="p-1 hover:opacity-70" onClick={handleCopy}>
-                        <Copy className="w-4 h-4" />
-                    </button>
+                    {isAdmin
+                        ? (<>
+                            <Lock className="w-4 h-4" />
+                            <span className="font-normal">{wifi_pass}</span>
+                            <div><Pen size={16} /></div>
+                        </>)
+                        : (<>
+                            <Lock className="w-4 h-4" />
+                            <span className="font-normal">{wifi_pass}</span>
+                            {isPublic && (
+                                <button className="p-1 hover:opacity-70" onClick={handleCopy}>
+                                    <Copy className="w-4 h-4" />
+                                </button>
+                            )}
+                        </>)
+                    }
+
                 </div>
 
             </div>

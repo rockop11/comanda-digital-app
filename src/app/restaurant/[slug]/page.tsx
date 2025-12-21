@@ -67,9 +67,10 @@ export default async function RestaurantPage(
                 image={image}
                 wifi_name={wifi.name}
                 wifi_pass={wifi.password}
+                mode='PUBLIC'
             />
 
-            <RestaurantMenu menu={menuCategories} />
+            <RestaurantMenu menu={menuCategories} mode='PUBLIC' />
         </div>
     );
 }
