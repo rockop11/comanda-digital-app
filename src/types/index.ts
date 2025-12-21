@@ -46,7 +46,7 @@ export interface SetCategorySelectedProps {
 }
 
 export interface RestaurantHeaderProps {
-  restaurantId: number;
+  restaurantId?: number;
   image: string;
   name: string;
   wifi_name: string;
