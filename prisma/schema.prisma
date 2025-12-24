@@ -17,21 +17,13 @@ model Restaurant {
   slug  String @unique
   name  String
   image String
-
-  wifiId Int  @unique
-  wifi   Wifi @relation(fields: [wifiId], references: [id])
+  wifiName String?
+  wifiPass String?
 
   menuCategories MenuCategory[]
   users          User[]
 }
 
-model Wifi {
-  id       Int    @id @default(autoincrement())
-  name     String
-  password String
-
-  restaurant Restaurant?
-}
 
 model MenuCategory {
   id       Int    @id @default(autoincrement())

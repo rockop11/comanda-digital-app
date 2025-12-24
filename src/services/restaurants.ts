@@ -7,7 +7,6 @@ export async function getRestaurantData(slug: string) {
     const restaurant = await prisma.restaurant.findUnique({
         where: { slug },
         include: {
-            wifi: true,
             menuCategories: {
                 orderBy: { id: 'asc' },
                 include: { dishes: { orderBy: { name: 'asc' } } }
@@ -38,12 +37,11 @@ export type RestaurantPayload = Prisma.RestaurantGetPayload<{
                 dishes: true;
             };
         };
-        wifi: true
     };
 }>;
 
 export async function getRestaurantDataByUser(userId: number): Promise<RestaurantPayload | null> {
-    
+
     if (!userId || isNaN(userId)) {
         console.log('id invalido')
         return null
@@ -64,8 +62,7 @@ export async function getRestaurantDataByUser(userId: number): Promise<Restauran
                                     orderBy: { name: 'asc' }
                                 }
                             }
-                        },
-                        wifi: true
+                        }
                     }
                 }
             }

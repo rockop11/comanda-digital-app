@@ -11,7 +11,6 @@ async function main() {
     await prisma.user.deleteMany();
 
     await prisma.restaurant.deleteMany();
-    await prisma.wifi.deleteMany();
 
     console.log('✅ Datos antiguos eliminados con éxito.');
 
@@ -41,13 +40,8 @@ async function main() {
             slug: "parrilla-don-julio",
             name: "Parrilla Don Julio",
             image: "/images/don-julio/don-julio-logo.png",
-
-            wifi: {
-                create: {
-                    name: "Wifi Don Julio",
-                    password: "DonJulio123",
-                },
-            },
+            wifiName: 'Movistar 5.8ghz',
+            wifiPass: 'FakePass123',
 
             users: {
                 create: {

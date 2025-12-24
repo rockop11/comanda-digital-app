@@ -3,10 +3,14 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 
 const globalForPrisma = global as unknown as {
-  prisma: PrismaClient
+  prisma: PrismaClient | undefined
 }
 
-const connectionString = process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL;
+const isProd = process.env.NODE_ENV === 'production'
+
+const connectionString = isProd
+  ? process.env.POSTGRES_PRISMA_URL
+  : process.env.DATABASE_URL
 
 if (!connectionString) {
   throw new Error("❌ Error: No se encontró la cadena de conexión POSTGRES_PRISMA_URL o DATABASE_URL.");

@@ -12,7 +12,8 @@ export const RestaurantAdminCard = ({
     name,
     image,
     menuCategories,
-    wifi,
+    wifiName,
+    wifiPass,
     id
 }: RestaurantPayload) => {
 
@@ -57,8 +58,8 @@ export const RestaurantAdminCard = ({
             <RestaurantHeader
                 image={image}
                 name={name}
-                wifi_name={wifi.name}
-                wifi_pass={wifi.password}
+                wifi_name={wifiName}
+                wifi_pass={wifiPass}
                 restaurantId={id}
                 mode="ADMIN"
             />

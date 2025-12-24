@@ -49,7 +49,7 @@ export interface RestaurantHeaderProps {
   restaurantId?: number;
   image: string;
   name: string;
-  wifi_name: string;
-  wifi_pass: string;
+  wifi_name: string | null;
+  wifi_pass: string | null;
   mode: 'PUBLIC' | 'ADMIN'
 }

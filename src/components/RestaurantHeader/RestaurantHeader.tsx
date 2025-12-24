@@ -23,7 +23,6 @@ export const RestaurantHeader = ({
     mode
 }: RestaurantHeaderProps) => {
 
-    const isPublic = mode === 'PUBLIC'
     const isAdmin = mode === 'ADMIN'
 
     const [editField, setEditField] = useState<EditFieldProps>({
@@ -32,6 +31,15 @@ export const RestaurantHeader = ({
     })
 
     const handleCopy = async () => {
+
+        if (!wifi_pass) {
+            toast.error('No hay contraseña para copiar', {
+                duration: 3000
+            })
+
+            return
+        }
+
         try {
             await navigator.clipboard.writeText(wifi_pass);
             toast.success('se copió la contraseña')
@@ -91,12 +99,12 @@ export const RestaurantHeader = ({
                     {isAdmin
                         ? (<>
                             <Wifi className="w-4 h-4" />
-                            <span className="font-normal">{wifi_name}</span>
+                            {wifi_name ? (<span className="font-normal">{wifi_name}</span>) : ('-')}
                             <div><Pen size={16} /></div>
                         </>)
                         : (<>
                             <Wifi className="w-4 h-4" />
-                            <span className="font-normal">{wifi_name}</span>
+                            {wifi_name ? (<span className="font-normal">{wifi_name}</span>) : ('-')}
                         </>)
                     }
                 </div>
@@ -105,22 +113,18 @@ export const RestaurantHeader = ({
                     {isAdmin
                         ? (<>
                             <Lock className="w-4 h-4" />
-                            <span className="font-normal">{wifi_pass}</span>
+                            {wifi_pass ? (<span className="font-normal">{wifi_pass}</span>) : ('-')}
                             <div><Pen size={16} /></div>
                         </>)
                         : (<>
                             <Lock className="w-4 h-4" />
-                            <span className="font-normal">{wifi_pass}</span>
-                            {isPublic && (
-                                <button className="p-1 hover:opacity-70" onClick={handleCopy}>
-                                    <Copy className="w-4 h-4" />
-                                </button>
-                            )}
+                            {wifi_pass ? (<span className="font-normal">{wifi_pass}</span>) : ('-')}
+                            <button className="p-1 hover:opacity-70" onClick={handleCopy} disabled={!wifi_pass}>
+                                <Copy className="w-4 h-4" />
+                            </button>
                         </>)
                     }
-
                 </div>
-
             </div>
         </div>
     )

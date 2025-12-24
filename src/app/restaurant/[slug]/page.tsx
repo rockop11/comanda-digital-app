@@ -58,15 +58,15 @@ export default async function RestaurantPage(
         notFound();
     }
 
-    const { name, image, wifi, menuCategories } = restaurant
+    const { name, image, wifiName, wifiPass, menuCategories } = restaurant
 
     return (
         <div className='max-w-3xl mx-auto'>
             <RestaurantHeader
                 name={name}
                 image={image}
-                wifi_name={wifi.name}
-                wifi_pass={wifi.password}
+                wifi_name={wifiName}
+                wifi_pass={wifiPass}
                 mode='PUBLIC'
             />
 
