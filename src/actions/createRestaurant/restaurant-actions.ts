@@ -34,8 +34,8 @@ export async function createRestaurantAction(
     const slug = formData.get('slug') as string;
     const file = formData.get('image') as File;
 
-    const wifiName = formData.get('wifiName') as string;
-    const wifiPassword = formData.get('wifiPassword') as string;
+    const wifiName = formData.get('wifiName') as string || null
+    const wifiPassword = formData.get('wifiPassword') as string || null
 
     const adminName = formData.get('adminName') as string;
     const adminEmail = formData.get('adminEmail') as string;
@@ -61,13 +61,8 @@ export async function createRestaurantAction(
                 slug: slug,
                 name: name,
                 image: publicImageUrl,
-
-                wifi: {
-                    create: {
-                        name: wifiName,
-                        password: wifiPassword,
-                    }
-                },
+                wifiName: wifiName,
+                wifiPass: wifiPassword,
 
                 users: {
                     create: {
