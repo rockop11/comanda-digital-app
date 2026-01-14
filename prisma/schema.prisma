@@ -16,7 +16,7 @@ model Restaurant {
   id    Int    @id @default(autoincrement()) // ID de restaurante es Int
   slug  String @unique
   name  String
-  image String
+  image String?
   wifiName String?
   wifiPass String?
 

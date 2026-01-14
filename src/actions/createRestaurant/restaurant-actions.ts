@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import { Role } from '@/generated/prisma/enums';
 import { Prisma } from '@/generated/prisma/client';
 import { put } from '@vercel/blob'
+import { revalidatePath } from 'next/cache';
 
 interface FormState {
     error?: string;
@@ -48,19 +49,10 @@ export async function createRestaurantAction(
     try {
         const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-        const blobPath = `restaurants/${slug}/logo-${Date.now()}.${file.name.split('.').pop()}`;
-
-        const { url: publicImageUrl } = await put(blobPath, file, {
-            access: 'public',
-            contentType: file.type,
-            token: blobToken
-        });
-
-        await prisma.restaurant.create({
+        const newRestaurant = await prisma.restaurant.create({
             data: {
                 slug: slug,
                 name: name,
-                image: publicImageUrl,
                 wifiName: wifiName,
                 wifiPass: wifiPassword,
 
@@ -74,6 +66,23 @@ export async function createRestaurantAction(
                 },
             },
         });
+
+        if (file && file.size > 0) {
+            const blobPath = `restaurants/${newRestaurant.id}/logo-${Date.now()}.${file.name.split('.').pop()}`;
+
+            const { url: publicImageUrl } = await put(blobPath, file, {
+                access: 'public',
+                contentType: file.type,
+                token: blobToken
+            });
+
+            await prisma.restaurant.update({
+                where: { id: newRestaurant.id },
+                data: { image: publicImageUrl }
+            })
+        }
+
+        revalidatePath('/admin');
 
         return {
             success: true
