@@ -7,6 +7,7 @@ import { createRestaurantAction } from '@/actions/createRestaurant/restaurant-ac
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Spinner } from '../ui/spinner'
+import { toast } from 'react-hot-toast'
 
 interface FormState {
     error?: string;
@@ -48,9 +49,13 @@ export const CreateRestaurantForm = (): JSX.Element => {
 
     useEffect(() => {
         if (state.success) {
-            router.push('/admin');
+            toast.success('Restaurante creado', { duration: 3000 })
         }
-    }, [state.success, router]);
+
+        if (state.error) {
+            toast.error(state.error, { duration: 3000 })
+        }
+    }, [state.success, state.error, router]);
 
     return (
         <>
@@ -58,7 +63,7 @@ export const CreateRestaurantForm = (): JSX.Element => {
                 <div className='flex flex-col gap-2'>
                     <h4 className='font-bold'>Datos del Restaurant</h4>
                     <Input
-                        placeholder='Nombre del Restaurant*'
+                        placeholder='Nombre del Restaurante*'
                         name='name'
                         required
                     />
@@ -115,7 +120,15 @@ export const CreateRestaurantForm = (): JSX.Element => {
                     />
                 </div>
 
-                <SubmitButton />
+                <div className='flex justify-between'>
+                    <Button
+                        variant="outline"
+                        onClick={() => router.push('/admin')}
+                    >
+                        Volver a inicio
+                    </Button>
+                    <SubmitButton />
+                </div>
             </form>
         </>
     )

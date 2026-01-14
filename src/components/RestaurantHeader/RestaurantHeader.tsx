@@ -60,7 +60,7 @@ export const RestaurantHeader = ({
 
             <div className="shrink-0">
                 <Image
-                    src={image}
+                    src={image ??'/images/no-image-rest.jpg'}
                     alt={`${name}-logo`}
                     width={100}
                     height={100}

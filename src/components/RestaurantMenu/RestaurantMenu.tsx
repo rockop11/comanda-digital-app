@@ -94,7 +94,7 @@ export const RestaurantMenu = ({
                                     >
                                         {!image
                                             ? (<Image
-                                                src='/images/image-not-found.jpeg'
+                                                src='/images/no-image-rest.jpg'
                                                 alt='Imagen no disponible'
                                                 width={120}
                                                 height={120}

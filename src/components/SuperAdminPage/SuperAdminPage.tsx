@@ -44,8 +44,8 @@ export const SuperAdminPage = ({ restaurants }: AdminPageProps): JSX.Element => 
                         <h5>{name}</h5>
 
                         <Image
-                            src={image}
-                            alt={`${name}-image`}
+                            src={image ?? '/images/no-image-rest.jpg'}
+                            alt={name ? `${name}-image` : 'not-found-image'}
                             width={100}
                             height={100}
                         />
