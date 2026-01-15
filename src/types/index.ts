@@ -51,5 +51,6 @@ export interface RestaurantHeaderProps {
   name: string;
   wifi_name: string | null;
   wifi_pass: string | null;
-  mode: 'PUBLIC' | 'ADMIN'
+  mode: 'PUBLIC' | 'ADMIN';
+  setOpen?: (open: boolean) => void;
 }
