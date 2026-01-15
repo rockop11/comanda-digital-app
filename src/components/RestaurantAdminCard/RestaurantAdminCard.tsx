@@ -7,6 +7,7 @@ import { Button } from "../ui/button"
 import { CategoryModal } from "../CategoryModal/CategoryModal"
 import { RestaurantHeader } from "../RestaurantHeader/RestaurantHeader"
 import { RestaurantMenu } from "../RestaurantMenu/RestaurantMenu"
+import { ImageModal } from "../ImageModal/ImageModal"
 
 export const RestaurantAdminCard = ({
     name,
@@ -55,6 +56,14 @@ export const RestaurantAdminCard = ({
                 />
             )}
 
+            {open && !actionModalType && !categorySelected && (
+                <ImageModal
+                    open
+                    onClose={closeModalHandler}
+                    restaurantId={id}
+                />
+            )}
+
             <RestaurantHeader
                 image={image}
                 name={name}
@@ -62,6 +71,7 @@ export const RestaurantAdminCard = ({
                 wifi_pass={wifiPass}
                 restaurantId={id}
                 mode="ADMIN"
+                setOpen={setOpen}
             />
 
             <div className="mt-4">

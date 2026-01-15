@@ -20,7 +20,8 @@ export const RestaurantHeader = ({
     name,
     wifi_name,
     wifi_pass,
-    mode
+    mode,
+    setOpen
 }: RestaurantHeaderProps) => {
 
     const isAdmin = mode === 'ADMIN'
@@ -58,9 +59,25 @@ export const RestaurantHeader = ({
     return (
         <div className="flex items-center gap-4 p-4 rounded-xl bg-white shadow-sm w-full">
 
-            <div className="shrink-0">
+            <div className="shrink-0 relative">
+                {isAdmin && setOpen && (
+                    <div className="absolute flex justify-center items-center top-2 right-2 rounded-full bg-white h-6 w-6">
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Pen
+                                    size={14}
+                                    className="cursor-pointer"
+                                    onClick={() => setOpen(true)}
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Editar imagen
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
+                )}
                 <Image
-                    src={image ??'/images/no-image-rest.jpg'}
+                    src={image ?? '/images/no-image-rest.jpg'}
                     alt={`${name}-logo`}
                     width={100}
                     height={100}
