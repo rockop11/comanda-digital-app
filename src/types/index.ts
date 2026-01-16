@@ -54,3 +54,5 @@ export interface RestaurantHeaderProps {
   mode: 'PUBLIC' | 'ADMIN';
   setOpen?: (open: boolean) => void;
 }
+
+export type FieldProps = 'NAME' | 'WIFI_NAME' | 'WIFI_PASS' | null
