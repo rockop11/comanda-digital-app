@@ -1,3 +1,4 @@
+import type { FieldProps } from "@/types";
 import { JSX, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Check, X } from 'lucide-react';
@@ -6,8 +7,6 @@ import { editRestaurantName } from "@/actions/editRestaurantName/EditRestaurantN
 import { useFormState, useFormStatus } from "react-dom";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../ui/spinner";
-
-type FieldProps = 'NAME' | 'WIFI_NAME' | 'WIFI_PASS' | null
 
 const initialState = {
     success: false,

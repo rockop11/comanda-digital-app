@@ -1,14 +1,14 @@
 import type { FieldProps } from "@/types";
 import { JSX, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { editWifiName } from "@/actions/editWifiName/editWifiName";
+import { editWifiPass } from "@/actions/editWifiPass/editWifiPass";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 import { Check, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-interface EditWifiNameFormProps {
+interface EditWifiPassFormProps {
     restaurantId: number;
     editFieldHandler: (field: FieldProps, edit: boolean) => void;
 }
@@ -18,7 +18,7 @@ const initialState = {
     error: null
 }
 
-const SubmitButton = () => {
+const SubmitButton = (): JSX.Element => {
     const { pending } = useFormStatus()
 
     return (
@@ -32,24 +32,24 @@ const SubmitButton = () => {
     )
 }
 
-export const EditWifiNameForm = ({
+export const EditWifiPassForm = ({
     restaurantId,
     editFieldHandler
-}: EditWifiNameFormProps): JSX.Element => {
+}: EditWifiPassFormProps): JSX.Element => {
 
-    const [state, action] = useFormState(editWifiName, initialState)
+    const [state, action] = useFormState(editWifiPass, initialState)
     const { pending } = useFormStatus()
 
     useEffect(() => {
         if (state.success && !pending) {
-            toast.success('se actualizó el nombre', {
+            toast.success('se actualizó la contraseña', {
                 duration: 3000
             })
             editFieldHandler(null, false)
         }
 
         if (state.error && !pending) {
-            toast.error('Error al editar el nombre', {
+            toast.error('Error al editar la contraseña', {
                 duration: 3000
             })
         }
@@ -61,7 +61,7 @@ export const EditWifiNameForm = ({
             className="flex items-center gap-2"
         >
             <Input type='hidden' name='restaurantId' value={restaurantId} />
-            <Input type='text' name='wifiName' placeholder="Nombre de la Red Wifi" />
+            <Input type='text' name='wifiPass' placeholder="Contraseña red Wifi" />
 
             <Tooltip>
                 <TooltipTrigger asChild>
@@ -89,4 +89,4 @@ export const EditWifiNameForm = ({
             </Tooltip>
         </form>
     )
-}   
+}

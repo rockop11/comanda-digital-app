@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { RestaurantEditNameForm } from "@/components/RestaurantEditNameForm/RestaurantEditNameForm";
 import { EditWifiNameForm } from "@/components/EditWifiNameForm/EditWifiNameForm";
+import { EditWifiPassForm } from "@/components/EditWifiPassForm/EditWifiPassForm";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Copy, Wifi, Lock, Pen } from "lucide-react"
 import { toast } from 'react-hot-toast'
@@ -134,7 +135,6 @@ export const RestaurantHeader = ({
                                             Editar Red Wifi
                                         </TooltipContent>
                                     </Tooltip>
-                                    {/* <div><Pen size={16} className="cursor-pointer" onClick={() => editFieldHandler('WIFI_NAME')} /></div> */}
                                 </>)}
 
                         </>)
@@ -148,9 +148,25 @@ export const RestaurantHeader = ({
                 <div className="flex items-center gap-2 text-sm md:text-base">
                     {isAdmin
                         ? (<>
-                            <Lock className="w-4 h-4" />
-                            {wifi_pass ? (<span className="font-normal">{wifi_pass}</span>) : ('-')}
-                            <div><Pen size={16} /></div>
+                            {editField.edit && editField.field === 'WIFI_PASS' && restaurantId
+                                ? (<>
+                                    <EditWifiPassForm
+                                        restaurantId={restaurantId}
+                                        editFieldHandler={editFieldHandler}
+                                    />
+                                </>)
+                                : (<>
+                                    <Lock className="w-4 h-4" />
+                                    {wifi_pass ? (<span className="font-normal">{wifi_pass}</span>) : ('-')}
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Pen size={16} className="cursor-pointer" onClick={() => editFieldHandler('WIFI_PASS')} />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            Editar contraseña
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </>)}
                         </>)
                         : (<>
                             <Lock className="w-4 h-4" />
