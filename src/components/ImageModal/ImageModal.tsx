@@ -1,4 +1,4 @@
-import { JSX, ReactNode } from "react";
+import { JSX } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { EditRestaurantImageForm } from "../EditRestaurantImageForm/EditRestaurantImageForm";

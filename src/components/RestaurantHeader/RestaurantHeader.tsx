@@ -2,7 +2,8 @@
 import type { RestaurantHeaderProps } from "@/types";
 import { useState } from "react";
 import Image from "next/image";
-import { RestaurantEditNameForm } from "../RestaurantEditNameForm/RestaurantEditNameForm";
+import { RestaurantEditNameForm } from "@/components/RestaurantEditNameForm/RestaurantEditNameForm";
+import { EditWifiNameForm } from "@/components/EditWifiNameForm/EditWifiNameForm";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Copy, Wifi, Lock, Pen } from "lucide-react"
 import { toast } from 'react-hot-toast'
@@ -100,7 +101,7 @@ export const RestaurantHeader = ({
                                 <h2 className="text-xl font-bold md:text-2xl">{name}</h2>
                                 <Tooltip>
                                     <TooltipTrigger>
-                                        <Pen size={18} className="cursor-pointer" onClick={() => editFieldHandler('NAME')} />
+                                        <Pen size={16} className="cursor-pointer" onClick={() => editFieldHandler('NAME')} />
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         Editar nombre
@@ -115,9 +116,27 @@ export const RestaurantHeader = ({
                 <div className="flex items-center gap-2 text-sm md:text-base">
                     {isAdmin
                         ? (<>
-                            <Wifi className="w-4 h-4" />
-                            {wifi_name ? (<span className="font-normal">{wifi_name}</span>) : ('-')}
-                            <div><Pen size={16} /></div>
+                            {editField.edit && editField.field === 'WIFI_NAME' && restaurantId
+                                ? (<>
+                                    <EditWifiNameForm
+                                        restaurantId={restaurantId}
+                                        editFieldHandler={editFieldHandler}
+                                    />
+                                </>)
+                                : (<>
+                                    <Wifi className="w-4 h-4" />
+                                    {wifi_name ? (<span className="font-normal">{wifi_name}</span>) : ('-')}
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <Pen size={16} className="cursor-pointer" onClick={() => editFieldHandler('WIFI_NAME')} />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            Editar Red Wifi
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    {/* <div><Pen size={16} className="cursor-pointer" onClick={() => editFieldHandler('WIFI_NAME')} /></div> */}
+                                </>)}
+
                         </>)
                         : (<>
                             <Wifi className="w-4 h-4" />
