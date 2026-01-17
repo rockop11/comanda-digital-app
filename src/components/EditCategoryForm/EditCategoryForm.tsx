@@ -43,7 +43,6 @@ export const EditCategoryForm = ({
 
     const [newCategoryName, setNewCategoryName] = useState<string>(categoryName)
 
-
     useEffect(() => {
         if (state.success && !pending) {
             toast.success('Se modificó la categoría', {

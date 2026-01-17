@@ -38,7 +38,6 @@ export async function createMenuCategoryAction(
         }
 
     } catch (error) {
-        console.log(error)
 
         return {
             success: false,
