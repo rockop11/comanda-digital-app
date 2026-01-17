@@ -42,7 +42,7 @@ export const CategoryModal = ({
                 className="w-full max-w-md rounded-2xl shadow-2xl m-3"
                 onClick={(e) => e.stopPropagation()}
             >
-                <CardHeader className="pb-2">
+                <CardHeader>
                     <CardTitle className="text-lg font-semibold text-gray-900">
                         {actionType === 'DELETE' ? 'Eliminar categoría' : 'Editar categoría'}
                     </CardTitle>

@@ -1,5 +1,5 @@
 import { Button } from "../ui/button"
-import { deleteMenuCategory } from '@/actions/deleteMenuCategory/deleteMenuCategory'
+import { deleteMenuCategory } from '@/actions/restaurant/deleteMenuCategory/deleteMenuCategory'
 import { Spinner } from "../ui/spinner";
 import { useFormState, useFormStatus } from "react-dom";
 import { useEffect } from "react";
