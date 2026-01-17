@@ -3,7 +3,7 @@ import { JSX, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Check, X } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
-import { editRestaurantName } from "@/actions/editRestaurantName/EditRestaurantName";
+import { editRestaurantName } from "@/actions/restaurant/editRestaurantName/EditRestaurantName";
 import { useFormState, useFormStatus } from "react-dom";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../ui/spinner";

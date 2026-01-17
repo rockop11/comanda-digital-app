@@ -1,6 +1,6 @@
 'use client'
 import { ChangeEvent, JSX, ReactNode, useEffect, useState } from "react";
-import { editRestaurantImage } from "@/actions/editRestaurantImage/editRestaurantImage";
+import { editRestaurantImage } from "@/actions/restaurant/editRestaurantImage/editRestaurantImage";
 import Image from "next/image";
 import { Input } from "../ui/input";
 import { useFormState, useFormStatus } from "react-dom";

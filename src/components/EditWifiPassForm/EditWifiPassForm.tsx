@@ -1,7 +1,7 @@
 import type { FieldProps } from "@/types";
 import { JSX, useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { editWifiPass } from "@/actions/editWifiPass/editWifiPass";
+import { editWifiPass } from "@/actions/restaurant/editWifiPass/editWifiPass";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";

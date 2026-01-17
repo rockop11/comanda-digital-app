@@ -1,6 +1,6 @@
 import { JSX, useEffect, useRef } from 'react'
 import { useFormState , useFormStatus} from 'react-dom'
-import { createMenuCategoryAction } from '@/actions/createMenuCategory/createMenuCategory'
+import { createMenuCategoryAction } from '@/actions/restaurant/createMenuCategory/createMenuCategory'
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { Spinner } from '../ui/spinner'

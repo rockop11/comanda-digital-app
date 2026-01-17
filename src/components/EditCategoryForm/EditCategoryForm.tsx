@@ -1,7 +1,7 @@
 import { JSX, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { useFormState, useFormStatus } from "react-dom";
-import { editMenuCategory } from "@/actions/editMenuCategory/editMenuCategory";
+import { editMenuCategory } from "@/actions/restaurant/editMenuCategory/editMenuCategory";
 import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
 import { toast } from 'react-hot-toast'
