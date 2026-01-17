@@ -92,6 +92,7 @@ export const RestaurantAdminCard = ({
                 setOpen={setOpen}
                 setActionModalType={setActionModalType}
                 setCategorySelected={setCategorySelected}
+                restaurantId={id}
             />
         </>
     )
