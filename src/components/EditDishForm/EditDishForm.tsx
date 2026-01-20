@@ -9,6 +9,7 @@ import { Spinner } from '../ui/spinner'
 import { Label } from '../ui/label'
 import { DollarSign } from 'lucide-react'
 import { toast } from "react-hot-toast";
+import { Checkbox } from '../ui/checkbox'
 
 interface EditDishFormProps {
     restaurantId: number;
@@ -103,6 +104,34 @@ export const EditDishForm = ({
                     type='file'
                     name='dishImage'
                 />
+            </div>
+
+            <div className="flex flex-col gap-2">
+                <h5>Propiedades del plato</h5>
+                <div className="flex items-center gap-3">
+                    <Checkbox id="isVeggie" defaultChecked={dish.isVegetarian ?? false} name='isVeggie'  />
+                    <Label htmlFor="isVeggie">Vegetariano</Label>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <Checkbox id="isVegan" defaultChecked={dish.isVegan ?? false} name='isVegan' />
+                    <Label htmlFor="isVegan">Vegano</Label>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <Checkbox id="isDairyFree" defaultChecked={dish.isDairyFree ?? false} name='isDairyFree' />
+                    <Label htmlFor="isDairyFree">Sin Lactosa</Label>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <Checkbox id="isSpicy" defaultChecked={dish.isSpicy ?? false} name='isSpicy' />
+                    <Label htmlFor="isSpicy">Picante</Label>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <Checkbox id="isGlutenFree" defaultChecked={dish.isGlutenFree ?? false} name='isGlutenFree' />
+                    <Label htmlFor="isGlutenFree">Sin TACC</Label>
+                </div>
             </div>
 
             <div>

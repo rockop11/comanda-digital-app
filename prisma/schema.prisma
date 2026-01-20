@@ -13,17 +13,17 @@ enum Role {
 }
 
 model Restaurant {
-  id    Int    @id @default(autoincrement()) // ID de restaurante es Int
-  slug  String @unique
-  name  String
-  image String?
+  id       Int     @id @default(autoincrement()) // ID de restaurante es Int
+  slug     String  @unique
+  name     String
+  image    String?
   wifiName String?
   wifiPass String?
+  isActive Boolean @default(true)
 
   menuCategories MenuCategory[]
   users          User[]
 }
-
 
 model MenuCategory {
   id       Int    @id @default(autoincrement())
@@ -49,11 +49,17 @@ model User {
 }
 
 model Dish {
-  id          Int     @id @default(autoincrement())
-  name        String
-  price       Float
-  image       String?
-  description String?
+  id           Int     @id @default(autoincrement())
+  name         String
+  price        Float
+  image        String?
+  description  String?
+  isActive     Boolean @default(true)
+  isVegan      Boolean @default(false)
+  isVegetarian Boolean @default(false)
+  isGlutenFree Boolean @default(false)
+  isDairyFree  Boolean @default(false)
+  isSpicy      Boolean @default(false)
 
   menuCategoryId Int
   menuCategory   MenuCategory @relation(fields: [menuCategoryId], references: [id], onDelete: Cascade)
