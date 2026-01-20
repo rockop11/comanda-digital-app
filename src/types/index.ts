@@ -12,6 +12,12 @@ export interface Dish {
   price: number;
   image?: string | null;
   description?: string | null;
+  isActive: boolean,
+  isVegan: boolean,
+  isVegetarian: boolean,
+  isGlutenFree: boolean,
+  isDairyFree: boolean,
+  isSpicy: boolean,
 }
 
 export interface MenuCategory {

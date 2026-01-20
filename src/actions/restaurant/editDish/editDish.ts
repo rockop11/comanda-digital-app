@@ -28,6 +28,11 @@ export async function editDish(
     const dishPrice = formData.get('dishPrice')
     const dishDescription = formData.get('dishDescription')?.toString()
     const dishImage = formData.get('dishImage') as File || null
+    const isVeggie = formData.get('isVeggie') as string || null
+    const isVegan = formData.get('isVegan') as string | null
+    const isDairyFree = formData.get('isDairyFree') as string || null
+    const isSpicy = formData.get('isSpicy') as string || null
+    const isGlutenFree = formData.get('isGlutenFree') as string | null
 
     if (!dishId || !restaurantId) {
         return {
@@ -54,12 +59,23 @@ export async function editDish(
             name?: string;
             price?: number;
             description?: string;
-            image?: string
+            image?: string;
+            isVegetarian?: boolean;
+            isVegan?: boolean;
+            isDairyFree?: boolean;
+            isSpicy?: boolean;
+            isGlutenFree?: boolean;
         } = {}
 
         if (dishName) data.name = dishName
         if (dishPrice) data.price = Number(dishPrice)
         if (dishDescription) data.description = dishDescription
+
+        data.isVegetarian = isVeggie === 'on'
+        data.isVegan = isVegan === 'on'
+        data.isDairyFree = isDairyFree === 'on'
+        data.isSpicy = isSpicy === 'on'
+        data.isGlutenFree = isGlutenFree === 'on'
 
 
         if (dishImage && dishImage.size > 0) {

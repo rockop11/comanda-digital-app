@@ -122,23 +122,23 @@ export const RestaurantMenu = ({
 
                             <AccordionContent>
                                 <div className="flex flex-col gap-4 mt-4">
-                                    {dishes.map(({ name, description, price, image, id }) => (
+                                    {dishes.map(({...dish}) => (
                                         <div
-                                            key={name + id}
+                                            key={dish.id}
                                             className="flex gap-4 p-4 rounded-xl shadow-sm bg-white border border-gray-100 hover:shadow-md transition-shadow relative"
                                         >
                                             {isAdmin && (
                                                 <div className='absolute top-4 right-4'>
                                                     <Tooltip>
                                                         <TooltipTrigger>
-                                                            <Pen size={16} className='cursor-pointer' onClick={() => openEditDishModal({ name, description, price, image, id })} />
+                                                            <Pen size={16} className='cursor-pointer' onClick={() => openEditDishModal({...dish})} />
                                                         </TooltipTrigger>
                                                         <TooltipContent>Editar plato</TooltipContent>
                                                     </Tooltip>
                                                 </div>
                                             )}
 
-                                            {!image
+                                            {!dish.image
                                                 ? (<Image
                                                     src='/images/no-image-rest.jpg'
                                                     alt='Imagen no disponible'
@@ -148,8 +148,8 @@ export const RestaurantMenu = ({
                                                     loading='eager'
                                                 />)
                                                 : (<Image
-                                                    src={image}
-                                                    alt={name}
+                                                    src={dish.image}
+                                                    alt={dish.name}
                                                     width={120}
                                                     height={120}
                                                     className="rounded-lg object-cover w-[120px] h-[120px]"
@@ -158,17 +158,17 @@ export const RestaurantMenu = ({
                                             <div className="flex flex-col flex-1 justify-between">
                                                 <div>
                                                     <h3 className="font-semibold text-lg leading-tight">
-                                                        {name}
+                                                        {dish.name}
                                                     </h3>
 
                                                     <p className="text-sm text-gray-500 mt-2 line-clamp-2">
-                                                        {description}
+                                                        {dish.description}
                                                     </p>
                                                 </div>
 
                                                 <div className="flex justify-end mt-2">
                                                     <span className="font-semibold text-gray-700 text-base">
-                                                        ${price.toFixed(2)}
+                                                        ${dish.price.toFixed(2)}
                                                     </span>
                                                 </div>
                                             </div>
