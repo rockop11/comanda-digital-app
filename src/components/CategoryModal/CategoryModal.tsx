@@ -1,5 +1,8 @@
 'use client'
 import { JSX } from "react";
+import { CreateDishForm } from "../CreateDishForm/CreateDishForm";
+import { EditCategoryForm } from "../EditCategoryForm/EditCategoryForm";
+import { DeleteCategoryForm } from "../DeleteCategoryForm/DeleteCategoryForm";
 import {
     Card,
     CardContent,
@@ -7,13 +10,11 @@ import {
     CardHeader,
     CardTitle
 } from "@/components/ui/card";
-import { DeleteCategoryForm } from "../DeleteCategoryForm/DeleteCategoryForm";
 import { Button } from "@/components/ui/button";
-import { EditCategoryForm } from "../EditCategoryForm/EditCategoryForm";
 
 type DeleteCategoryModalProps = {
     open: boolean;
-    actionType: 'EDIT' | 'DELETE' | null
+    actionType: 'EDIT' | 'DELETE' | 'CREATE' | null
     categoryId: number;
     restaurantId: number;
     categoryName: string;
@@ -44,12 +45,30 @@ export const CategoryModal = ({
             >
                 <CardHeader>
                     <CardTitle className="text-lg font-semibold text-gray-900">
-                        {actionType === 'DELETE' ? 'Eliminar categoría' : 'Editar categoría'}
+                        {actionType === 'CREATE' && (<>Crear plato</>)}
+                        {actionType === 'EDIT' && (<>Editar categoría</>)}
+                        {actionType === 'DELETE' && (<>Eliminar categoría</>)}
                     </CardTitle>
                     <p className="text-sm text-gray-500 font-bold">
                         {categoryName}
                     </p>
                 </CardHeader>
+
+                {actionType === 'CREATE' && (
+                    <CardContent>
+                        <CreateDishForm
+                            restaurantId={restaurantId}
+                            categoryId={categoryId}
+                            onClose={onClose}
+                        >
+                            <CardFooter className="px-0">
+                                <Button variant="outline" className="cursor-pointer " onClick={onClose}>
+                                    Cancelar
+                                </Button>
+                            </CardFooter>
+                        </CreateDishForm>
+                    </CardContent>
+                )}
 
                 {/* CardContent DELETE */}
                 {actionType === 'DELETE' && (

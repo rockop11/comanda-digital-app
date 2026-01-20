@@ -14,7 +14,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Trash2, Pen } from "lucide-react"
+import { Trash2, Pen, Plus } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { EditDishModal } from '../EditDishModal/EditDishModal';
 
@@ -79,41 +79,78 @@ export const RestaurantMenu = ({
                                         </span>
 
                                         <div className="flex items-center gap-4">
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <div
+                                                        role='button'
+                                                        tabIndex={0}
+                                                        className="cursor-pointer"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setOpen(true);
+                                                            setActionModalType('CREATE');
+                                                            setCategorySelected({
+                                                                id,
+                                                                name: category
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Plus size={24} />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Crear plato</p>
+                                                </TooltipContent>
+                                            </Tooltip>
 
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                className="cursor-pointer"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setOpen(true)
-                                                    setActionModalType('EDIT')
-                                                    setCategorySelected({
-                                                        id,
-                                                        name: category
-                                                    })
-                                                }}
-                                            >
-                                                <Pen size={18} />
-                                            </div>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <div
+                                                        role='button'
+                                                        tabIndex={0}
+                                                        className="cursor-pointer"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setOpen(true);
+                                                            setActionModalType('EDIT');
+                                                            setCategorySelected({
+                                                                id,
+                                                                name: category
+                                                            });
+                                                        }}
+                                                    >
+                                                        <Pen size={18} />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Editar categoría</p>
+                                                </TooltipContent>
+                                            </Tooltip>
 
-                                            <div
-                                                role="button"
-                                                tabIndex={0}
-                                                className="cursor-pointer text-red-500 hover:text-red-700"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setOpen(true)
-                                                    setActionModalType('DELETE')
-                                                    setCategorySelected({
-                                                        id,
-                                                        name: category,
-                                                        dishesCount: dishes.length
-                                                    })
-                                                }}
-                                            >
-                                                <Trash2 size={18} />
-                                            </div>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <div
+                                                        role='button'
+                                                        tabIndex={0}
+                                                        className="cursor-pointer text-red-500 hover:text-red-700"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setOpen(true)
+                                                            setActionModalType('DELETE')
+                                                            setCategorySelected({
+                                                                id,
+                                                                name: category,
+                                                                dishesCount: dishes.length
+                                                            })
+                                                        }}
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </div>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Eliminar categoría</p>
+                                                </TooltipContent>
+                                            </Tooltip>
                                         </div>
                                     </div>)
                                     : (<span>{category}</span>)
@@ -122,7 +159,7 @@ export const RestaurantMenu = ({
 
                             <AccordionContent>
                                 <div className="flex flex-col gap-4 mt-4">
-                                    {dishes.map(({...dish}) => (
+                                    {dishes.map(({ ...dish }) => (
                                         <div
                                             key={dish.id}
                                             className="flex gap-4 p-4 rounded-xl shadow-sm bg-white border border-gray-100 hover:shadow-md transition-shadow relative"
@@ -131,7 +168,7 @@ export const RestaurantMenu = ({
                                                 <div className='absolute top-4 right-4'>
                                                     <Tooltip>
                                                         <TooltipTrigger>
-                                                            <Pen size={16} className='cursor-pointer' onClick={() => openEditDishModal({...dish})} />
+                                                            <Pen size={16} className='cursor-pointer' onClick={() => openEditDishModal({ ...dish })} />
                                                         </TooltipTrigger>
                                                         <TooltipContent>Editar plato</TooltipContent>
                                                     </Tooltip>
