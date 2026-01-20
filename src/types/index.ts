@@ -44,7 +44,7 @@ export interface Restaurant {
   users: User[];
 }
 
-export type ActionTypeModalProps = 'EDIT' | 'DELETE' | null
+export type ActionTypeModalProps = 'EDIT' | 'DELETE' | 'CREATE' | null
 
 export interface SetCategorySelectedProps {
   id: number,
