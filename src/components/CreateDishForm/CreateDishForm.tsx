@@ -75,6 +75,8 @@ export const CreateDishForm = ({ restaurantId, categoryId, children, onClose }: 
                 <Textarea
                     id='dishDescription'
                     name='dishDescription'
+                    className="min-h-20 max-h-32 resize-none"
+                    rows={3}
                 />
             </div>
 

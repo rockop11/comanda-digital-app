@@ -17,6 +17,7 @@ import {
 import { Trash2, Pen, Plus } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { EditDishModal } from '../EditDishModal/EditDishModal';
+import { DeleteDishModal } from '../DeleteDishModal/DeleteDishModal';
 
 interface RestaurantMenuProps {
     menu: MenuCategory[];
@@ -39,7 +40,9 @@ export const RestaurantMenu = ({
     const isAdmin = mode === 'ADMIN';
 
     const [isEditDishModalOpen, setIsEditDishModalOpen] = useState<boolean>(false);
+    const [isDeleteDishModalOpen, setIsDeleteDishModalOpen] = useState<boolean>(false)
     const [dishToEdit, setDishToEdit] = useState<Dish | null>(null)
+    const [dishToDelete, setDishToDelete] = useState<Dish | null>(null)
 
     const openEditDishModal = (dish: Dish) => {
         setIsEditDishModalOpen(true)
@@ -51,15 +54,25 @@ export const RestaurantMenu = ({
         setDishToEdit(null)
     }
 
+    const openDeleteModalHandler = (dish: Dish) => {
+        setIsDeleteDishModalOpen(true)
+        setDishToDelete(dish)
+    }
+
+    const closeDeleteModalHandler = () => {
+        setIsDeleteDishModalOpen(false)
+        setDishToDelete(null)
+    }
+
     useEffect(() => {
-        if (isEditDishModalOpen) {
+        if (isEditDishModalOpen || isDeleteDishModalOpen) {
             document.body.style.overflow = 'hidden';
         }
 
         return () => {
             document.body.style.overflow = '';
         };
-    }, [isEditDishModalOpen, menu]);
+    }, [isEditDishModalOpen, isDeleteDishModalOpen, menu]);
 
     return (
         <>
@@ -165,12 +178,19 @@ export const RestaurantMenu = ({
                                             className="flex gap-4 p-4 rounded-xl shadow-sm bg-white border border-gray-100 hover:shadow-md transition-shadow relative"
                                         >
                                             {isAdmin && (
-                                                <div className='absolute top-4 right-4'>
+                                                <div className='absolute top-4 right-4 flex gap-2'>
                                                     <Tooltip>
                                                         <TooltipTrigger>
                                                             <Pen size={16} className='cursor-pointer' onClick={() => openEditDishModal({ ...dish })} />
                                                         </TooltipTrigger>
                                                         <TooltipContent>Editar plato</TooltipContent>
+                                                    </Tooltip>
+
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <Trash2 size={16} className='cursor-pointer' color='red' onClick={() => openDeleteModalHandler(dish)} />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>Eliminar plato</TooltipContent>
                                                     </Tooltip>
                                                 </div>
                                             )}
@@ -223,6 +243,13 @@ export const RestaurantMenu = ({
                     dish={dishToEdit}
                     onClose={closeEditDishModal}
                     restaurantId={restaurantId}
+                />
+            )}
+
+            {isDeleteDishModalOpen && dishToDelete && restaurantId && isAdmin && (
+                <DeleteDishModal
+                    dish={dishToDelete}
+                    onClose={closeDeleteModalHandler}
                 />
             )}
         </>
