@@ -8,6 +8,9 @@ import type {
 } from '@/types/index';
 import { JSX, useEffect, useState } from 'react';
 import Image from "next/image";
+import { EditDishModal } from '../EditDishModal/EditDishModal';
+import { DeleteDishModal } from '../DeleteDishModal/DeleteDishModal';
+import { toggleActivationDish } from '@/actions/restaurant/toggleActivationDish/toggleActivationDish';
 import {
     Accordion,
     AccordionContent,
@@ -16,8 +19,9 @@ import {
 } from "@/components/ui/accordion"
 import { Trash2, Pen, Plus } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
-import { EditDishModal } from '../EditDishModal/EditDishModal';
-import { DeleteDishModal } from '../DeleteDishModal/DeleteDishModal';
+import { Switch } from '../ui/switch';
+import { toast } from 'react-hot-toast'
+import { Badge } from '../ui/badge';
 
 interface RestaurantMenuProps {
     menu: MenuCategory[];
@@ -43,6 +47,23 @@ export const RestaurantMenu = ({
     const [isDeleteDishModalOpen, setIsDeleteDishModalOpen] = useState<boolean>(false)
     const [dishToEdit, setDishToEdit] = useState<Dish | null>(null)
     const [dishToDelete, setDishToDelete] = useState<Dish | null>(null)
+    const [loadingDishId, setLoadingDishId] = useState<number | null>(null)
+
+    const handleToggleActiveDish = async (dishId: number, currentActive: boolean) => {
+        const newActiveState = !currentActive
+
+        setLoadingDishId(dishId)
+
+        const result = await toggleActivationDish(dishId, newActiveState)
+
+        if (result.success) {
+            toast.success(newActiveState ? 'Plato activado' : 'Plato desactivado', { duration: 3000 })
+        } else {
+            toast.error('Error al cambiar estado del plato', { duration: 3000 })
+        }
+
+        setLoadingDishId(null)
+    }
 
     const openEditDishModal = (dish: Dish) => {
         setIsEditDishModalOpen(true)
@@ -175,19 +196,53 @@ export const RestaurantMenu = ({
                                     {dishes.map(({ ...dish }) => (
                                         <div
                                             key={dish.id}
-                                            className="flex gap-4 p-4 rounded-xl shadow-sm bg-white border border-gray-100 hover:shadow-md transition-shadow relative"
+                                            className={`
+                                                flex flex-col gap-4
+                                                md:flex-row
+                                                p-4 rounded-xl shadow-sm border transition-all relative
+                                                ${dish.isActive
+                                                    ? 'bg-white border-gray-100 hover:shadow-md'
+                                                    : `
+                                                    bg-gray-50 border-gray-200
+                                                    [&>*:not(.interactive)]:opacity-50
+                                                    [&>*:not(.interactive)]:grayscale
+                                                    [&>*:not(.interactive)]:pointer-events-none
+                                                    `
+                                                }
+                                            `}
                                         >
                                             {isAdmin && (
-                                                <div className='absolute top-4 right-4 flex gap-2'>
+                                                <div className="
+                                                    flex gap-2 interactive pointer-events-auto
+                                                    self-end
+                                                    mb-2
+                                                    md:absolute md:top-4 md:right-4 md:z-20
+                                                ">
                                                     <Tooltip>
-                                                        <TooltipTrigger>
+                                                        <TooltipTrigger asChild>
+                                                            <div>
+                                                                <Switch
+                                                                    checked={dish.isActive}
+                                                                    onCheckedChange={() => handleToggleActiveDish(dish.id, dish.isActive)}
+                                                                    disabled={loadingDishId === dish.id}
+                                                                />
+                                                            </div>
+                                                        </TooltipTrigger>
+
+                                                        <TooltipContent>
+                                                            {dish.isActive ? 'Desactivar' : 'Activar'}
+                                                        </TooltipContent>
+                                                    </Tooltip>
+
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
                                                             <Pen size={16} className='cursor-pointer' onClick={() => openEditDishModal({ ...dish })} />
                                                         </TooltipTrigger>
                                                         <TooltipContent>Editar plato</TooltipContent>
                                                     </Tooltip>
 
                                                     <Tooltip>
-                                                        <TooltipTrigger>
+                                                        <TooltipTrigger asChild>
                                                             <Trash2 size={16} className='cursor-pointer' color='red' onClick={() => openDeleteModalHandler(dish)} />
                                                         </TooltipTrigger>
                                                         <TooltipContent>Eliminar plato</TooltipContent>
@@ -195,26 +250,33 @@ export const RestaurantMenu = ({
                                                 </div>
                                             )}
 
-                                            {!dish.image
-                                                ? (<Image
-                                                    src='/images/no-image-rest.jpg'
-                                                    alt='Imagen no disponible'
-                                                    width={120}
-                                                    height={120}
-                                                    className="rounded-lg object-cover w-[120px] h-[120px]"
-                                                    loading='eager'
-                                                />)
-                                                : (<Image
-                                                    src={dish.image}
-                                                    alt={dish.name}
-                                                    width={120}
-                                                    height={120}
-                                                    className="rounded-lg object-cover w-[120px] h-[120px]"
-                                                />)}
+                                            {!dish.image ? (
+                                                <div className="relative w-full md:w-40 aspect-square rounded-md overflow-hidden ring-1 ring-black/10">
+                                                    <Image
+                                                        src="/images/no-image-rest.jpg"
+                                                        alt="Imagen no disponible"
+                                                        fill
+                                                        sizes="(max-width: 768px) 100vw, 160px"
+                                                        className="object-contain object-center"
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="relative w-full md:w-40 aspect-square rounded-md overflow-hidden ring-1 ring-black/10">
+                                                    <Image
+                                                        src={dish.image}
+                                                        alt={dish.name}
+                                                        fill
+                                                        sizes="(max-width: 768px) 100vw, 160px"
+                                                        className="object-contain object-center"
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                            )}
 
                                             <div className="flex flex-col flex-1 justify-between">
                                                 <div>
-                                                    <h3 className="font-semibold text-lg leading-tight">
+                                                    <h3 className="font-semibold text-base sm:text-lg leading-tight line-clamp-2">
                                                         {dish.name}
                                                     </h3>
 
@@ -223,10 +285,34 @@ export const RestaurantMenu = ({
                                                     </p>
                                                 </div>
 
-                                                <div className="flex justify-end mt-2">
-                                                    <span className="font-semibold text-gray-700 text-base">
+                                                <div className="flex justify-start md:justify-end mt-3 pt-2 border-t md:border-t-0">
+                                                    <span
+                                                        className="font-bold text-lg text-gray-900 md:text-base md:text-gray-700"
+                                                    >
                                                         ${dish.price.toFixed(2)}
                                                     </span>
+                                                </div>
+
+                                                <div className='flex flex-wrap gap-2 mt-2'>
+                                                    {dish.isVegan && (
+                                                        <Badge>Vegano</Badge>
+                                                    )}
+
+                                                    {dish.isVegetarian && (
+                                                        <Badge>Vegetariano</Badge>
+                                                    )}
+
+                                                    {dish.isDairyFree && (
+                                                        <Badge>Sin lactosa</Badge>
+                                                    )}
+
+                                                    {dish.isSpicy && (
+                                                        <Badge>Picante</Badge>
+                                                    )}
+
+                                                    {dish.isGlutenFree && (
+                                                        <Badge>Sin TACC</Badge>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -255,3 +341,19 @@ export const RestaurantMenu = ({
         </>
     )
 }
+
+
+{/* <div
+                                            key={dish.id}
+                                            className={`
+                                                flex gap-4 p-4 rounded-xl shadow-sm border transition-all relative
+                                                    ${dish.isActive
+                                                    ? 'bg-white border-gray-100 hover:shadow-md'
+                                                    : `
+                                                    bg-gray-50 border-gray-200
+                                                    [&>*:not(.interactive)]:opacity-50
+                                                    [&>*:not(.interactive)]:grayscale
+                                                    [&>*:not(.interactive)]:pointer-events-none
+                                                `}
+                                            `}
+                                        ></div> */}
