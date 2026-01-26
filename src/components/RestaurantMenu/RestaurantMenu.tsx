@@ -7,7 +7,7 @@ import type {
     SetCategorySelectedProps
 } from '@/types/index';
 import { JSX, useEffect, useState } from 'react';
-import Image from "next/image";
+import { DishCard } from '../DishCard/DishCard';
 import { EditDishModal } from '../EditDishModal/EditDishModal';
 import { DeleteDishModal } from '../DeleteDishModal/DeleteDishModal';
 import { toggleActivationDish } from '@/actions/restaurant/toggleActivationDish/toggleActivationDish';
@@ -19,9 +19,7 @@ import {
 } from "@/components/ui/accordion"
 import { Trash2, Pen, Plus } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
-import { Switch } from '../ui/switch';
 import { toast } from 'react-hot-toast'
-import { Badge } from '../ui/badge';
 
 interface RestaurantMenuProps {
     menu: MenuCategory[];
@@ -87,13 +85,25 @@ export const RestaurantMenu = ({
 
     useEffect(() => {
         if (isEditDishModalOpen || isDeleteDishModalOpen) {
+            // Bloquear scroll del body
             document.body.style.overflow = 'hidden';
+            // Prevenir scroll en iOS Safari
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+        } else {
+            // Restaurar scroll
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
         }
 
         return () => {
             document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
         };
-    }, [isEditDishModalOpen, isDeleteDishModalOpen, menu]);
+    }, [isEditDishModalOpen, isDeleteDishModalOpen]);
+
 
     return (
         <>
@@ -192,130 +202,18 @@ export const RestaurantMenu = ({
                             </AccordionTrigger>
 
                             <AccordionContent>
-                                <div className="flex flex-col gap-4 mt-4">
+                                <div className="flex flex-col gap-3 mt-4">
                                     {dishes.map(({ ...dish }) => (
-                                        <div
+                                        <DishCard
                                             key={dish.id}
-                                            className={`
-                                                flex flex-col gap-4
-                                                md:flex-row
-                                                p-4 rounded-xl shadow-sm border transition-all relative
-                                                ${dish.isActive
-                                                    ? 'bg-white border-gray-100 hover:shadow-md'
-                                                    : `
-                                                    bg-gray-50 border-gray-200
-                                                    [&>*:not(.interactive)]:opacity-50
-                                                    [&>*:not(.interactive)]:grayscale
-                                                    [&>*:not(.interactive)]:pointer-events-none
-                                                    `
-                                                }
-                                            `}
-                                        >
-                                            {isAdmin && (
-                                                <div className="
-                                                    flex gap-2 interactive pointer-events-auto
-                                                    self-end
-                                                    mb-2
-                                                    md:absolute md:top-4 md:right-4 md:z-20
-                                                ">
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <div>
-                                                                <Switch
-                                                                    checked={dish.isActive}
-                                                                    onCheckedChange={() => handleToggleActiveDish(dish.id, dish.isActive)}
-                                                                    disabled={loadingDishId === dish.id}
-                                                                />
-                                                            </div>
-                                                        </TooltipTrigger>
+                                            dish={dish}
+                                            isAdmin={isAdmin}
+                                            loadingDishId={loadingDishId}
+                                            handleToggleActiveDish={handleToggleActiveDish}
+                                            openEditDishModal={openEditDishModal}
+                                            openDeleteModalHandler={openDeleteModalHandler}
 
-                                                        <TooltipContent>
-                                                            {dish.isActive ? 'Desactivar' : 'Activar'}
-                                                        </TooltipContent>
-                                                    </Tooltip>
-
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Pen size={16} className='cursor-pointer' onClick={() => openEditDishModal({ ...dish })} />
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>Editar plato</TooltipContent>
-                                                    </Tooltip>
-
-                                                    <Tooltip>
-                                                        <TooltipTrigger asChild>
-                                                            <Trash2 size={16} className='cursor-pointer' color='red' onClick={() => openDeleteModalHandler(dish)} />
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>Eliminar plato</TooltipContent>
-                                                    </Tooltip>
-                                                </div>
-                                            )}
-
-                                            {!dish.image ? (
-                                                <div className="relative w-full md:w-40 aspect-square rounded-md overflow-hidden ring-1 ring-black/10">
-                                                    <Image
-                                                        src="/images/no-image-rest.jpg"
-                                                        alt="Imagen no disponible"
-                                                        fill
-                                                        sizes="(max-width: 768px) 100vw, 160px"
-                                                        className="object-contain object-center"
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className="relative w-full md:w-40 aspect-square rounded-md overflow-hidden ring-1 ring-black/10">
-                                                    <Image
-                                                        src={dish.image}
-                                                        alt={dish.name}
-                                                        fill
-                                                        sizes="(max-width: 768px) 100vw, 160px"
-                                                        className="object-contain object-center"
-                                                        loading="lazy"
-                                                    />
-                                                </div>
-                                            )}
-
-                                            <div className="flex flex-col flex-1 justify-between">
-                                                <div>
-                                                    <h3 className="font-semibold text-base sm:text-lg leading-tight line-clamp-2">
-                                                        {dish.name}
-                                                    </h3>
-
-                                                    <p className="text-sm text-gray-500 mt-2 line-clamp-2">
-                                                        {dish.description}
-                                                    </p>
-                                                </div>
-
-                                                <div className="flex justify-start md:justify-end mt-3 pt-2 border-t md:border-t-0">
-                                                    <span
-                                                        className="font-bold text-lg text-gray-900 md:text-base md:text-gray-700"
-                                                    >
-                                                        ${dish.price.toFixed(2)}
-                                                    </span>
-                                                </div>
-
-                                                <div className='flex flex-wrap gap-2 mt-2'>
-                                                    {dish.isVegan && (
-                                                        <Badge>Vegano</Badge>
-                                                    )}
-
-                                                    {dish.isVegetarian && (
-                                                        <Badge>Vegetariano</Badge>
-                                                    )}
-
-                                                    {dish.isDairyFree && (
-                                                        <Badge>Sin lactosa</Badge>
-                                                    )}
-
-                                                    {dish.isSpicy && (
-                                                        <Badge>Picante</Badge>
-                                                    )}
-
-                                                    {dish.isGlutenFree && (
-                                                        <Badge>Sin TACC</Badge>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
+                                        />
                                     ))}
                                 </div>
                             </AccordionContent>
@@ -341,19 +239,3 @@ export const RestaurantMenu = ({
         </>
     )
 }
-
-
-{/* <div
-                                            key={dish.id}
-                                            className={`
-                                                flex gap-4 p-4 rounded-xl shadow-sm border transition-all relative
-                                                    ${dish.isActive
-                                                    ? 'bg-white border-gray-100 hover:shadow-md'
-                                                    : `
-                                                    bg-gray-50 border-gray-200
-                                                    [&>*:not(.interactive)]:opacity-50
-                                                    [&>*:not(.interactive)]:grayscale
-                                                    [&>*:not(.interactive)]:pointer-events-none
-                                                `}
-                                            `}
-                                        ></div> */}

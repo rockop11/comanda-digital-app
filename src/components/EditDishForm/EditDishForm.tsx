@@ -94,6 +94,8 @@ export const EditDishForm = ({
                     id='dishDescription'
                     name='dishDescription'
                     defaultValue={dish.description ?? ''}
+                    className="min-h-20 max-h-32 resize-none"
+                    rows={3}
                 />
             </div>
 
@@ -106,31 +108,69 @@ export const EditDishForm = ({
                 />
             </div>
 
-            <div className="flex flex-col gap-2">
-                <h5>Propiedades del plato</h5>
-                <div className="flex items-center gap-3">
-                    <Checkbox id="isVeggie" defaultChecked={dish.isVegetarian ?? false} name='isVeggie'  />
-                    <Label htmlFor="isVeggie">Vegetariano</Label>
-                </div>
+            <div className="flex flex-col gap-3 p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <h6 className="text-sm md:text-base font-semibold text-gray-700">Propiedades del plato</h6>
 
-                <div className="flex items-center gap-3">
-                    <Checkbox id="isVegan" defaultChecked={dish.isVegan ?? false} name='isVegan' />
-                    <Label htmlFor="isVegan">Vegano</Label>
-                </div>
+                <div className='flex flex-wrap gap-2 md:gap-3 w-full'>
+                    <div className="flex items-center gap-2 p-2 md:p-2.5 bg-white rounded-md border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
+                        <Checkbox
+                            id="isVeggie"
+                            defaultChecked={dish.isVegetarian ?? false}
+                            name='isVeggie'
+                            className="w-4 h-4 md:w-5 md:h-5"
+                        />
+                        <Label htmlFor="isVeggie" className="cursor-pointer text-xs md:text-sm font-medium">
+                            Vegetariano
+                        </Label>
+                    </div>
 
-                <div className="flex items-center gap-3">
-                    <Checkbox id="isDairyFree" defaultChecked={dish.isDairyFree ?? false} name='isDairyFree' />
-                    <Label htmlFor="isDairyFree">Sin Lactosa</Label>
-                </div>
+                    <div className="flex items-center gap-2 p-2 md:p-2.5 bg-white rounded-md border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
+                        <Checkbox
+                            id="isVegan"
+                            defaultChecked={dish.isVegan ?? false}
+                            name='isVegan'
+                            className="w-4 h-4 md:w-5 md:h-5"
+                        />
+                        <Label htmlFor="isVegan" className="cursor-pointer text-xs md:text-sm font-medium">
+                            Vegano
+                        </Label>
+                    </div>
 
-                <div className="flex items-center gap-3">
-                    <Checkbox id="isSpicy" defaultChecked={dish.isSpicy ?? false} name='isSpicy' />
-                    <Label htmlFor="isSpicy">Picante</Label>
-                </div>
+                    <div className="flex items-center gap-2 p-2 md:p-2.5 bg-white rounded-md border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
+                        <Checkbox
+                            id="isDairyFree"
+                            defaultChecked={dish.isDairyFree ?? false}
+                            name='isDairyFree'
+                            className="w-4 h-4 md:w-5 md:h-5"
+                        />
+                        <Label htmlFor="isDairyFree" className="cursor-pointer text-xs md:text-sm font-medium">
+                            Sin Lactosa
+                        </Label>
+                    </div>
 
-                <div className="flex items-center gap-3">
-                    <Checkbox id="isGlutenFree" defaultChecked={dish.isGlutenFree ?? false} name='isGlutenFree' />
-                    <Label htmlFor="isGlutenFree">Sin TACC</Label>
+                    <div className="flex items-center gap-2 p-2 md:p-2.5 bg-white rounded-md border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
+                        <Checkbox
+                            id="isSpicy"
+                            defaultChecked={dish.isSpicy ?? false}
+                            name='isSpicy'
+                            className="w-4 h-4 md:w-5 md:h-5"
+                        />
+                        <Label htmlFor="isSpicy" className="cursor-pointer text-xs md:text-sm font-medium">
+                            Picante
+                        </Label>
+                    </div>
+
+                    <div className="flex items-center gap-2 p-2 md:p-2.5 bg-white rounded-md border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer">
+                        <Checkbox
+                            id="isGlutenFree"
+                            defaultChecked={dish.isGlutenFree ?? false}
+                            name='isGlutenFree'
+                            className="w-4 h-4 md:w-5 md:h-5"
+                        />
+                        <Label htmlFor="isGlutenFree" className="cursor-pointer text-xs md:text-sm font-medium">
+                            Sin TACC
+                        </Label>
+                    </div>
                 </div>
             </div>
 

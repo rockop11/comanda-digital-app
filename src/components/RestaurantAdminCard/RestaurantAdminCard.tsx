@@ -74,7 +74,7 @@ export const RestaurantAdminCard = ({
                 setOpen={setOpen}
             />
 
-            <div className="mt-4">
+            <div className="mt-4 px-4">
                 <Button
                     className="cursor-pointer"
                     onClick={showAddNewCategoryHandler}>

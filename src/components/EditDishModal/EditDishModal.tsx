@@ -20,10 +20,11 @@ export const EditDishModal = ({ restaurantId, dish, onClose }: EditDishModalProp
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex justify-center bg-black/50 backdrop-blur-sm"
+            onClick={onClose}
         >
             <Card
-                className="w-full max-w-md rounded-2xl shadow-2xl m-3"
+                className="w-full max-w-md rounded-2xl shadow-2xl m-3 max-h-[715px] overflow-scroll"
             >
                 <CardHeader>
                     <CardTitle className="text-lg font-semibold text-gray-900">
