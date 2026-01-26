@@ -41,7 +41,7 @@ export const Navbar = ({ session }: NavbarProps) => {
                 />
             )}
 
-            <nav className="max-w-3xl mx-auto flex justify-between items-center my-4">
+            <nav className="max-w-3xl mx-auto flex justify-between items-center px-4 my-4">
                 <p>Bienvenido: {user.name}</p>
 
                 <div className=" flex gap-4">
