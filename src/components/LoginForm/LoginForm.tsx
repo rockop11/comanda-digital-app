@@ -19,6 +19,7 @@ export const LoginForm = (): JSX.Element => {
 
     const [error, setError] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isRedirecting, setIsRedirecting] = useState<boolean>(false)
     const [togglePassword, setTogglePassword] = useState<boolean>(false)
     const [credentials, setCredentials] = useState<CredentialsProps>({
         email: '',
@@ -63,25 +64,27 @@ export const LoginForm = (): JSX.Element => {
                 redirect: false,
             })
 
-            if (result?.error) {
-                setError('Credenciales inválidas. Verifica email y contraseña.');
-                return
+            if (result && result.error) {
+                setError('Credenciales Inválidas*')
+                setIsLoading(false)
             }
 
-            const session = await getSession()
+            if (result && !result.error) {
+                setIsLoading(false)
+                setIsRedirecting(true)
 
-            if (session && session.user.role === 'SUPERADMIN') {
-                router.push('/admin');
-            } else if (session && session.user.role === 'RESTAURANT_ADMIN') {
-                router.push('/dashboard');
-            } else {
-                router.push('/');
+                const session = await getSession()
+
+                if (session && session.user.role === 'SUPERADMIN') {
+                    router.push('/admin');
+                } else if (session && session.user.role === 'RESTAURANT_ADMIN') {
+                    router.push('/dashboard');
+                } else {
+                    router.push('/');
+                }
             }
-
         } catch (err) {
-            console.error('Error Crítico de Conexión o Sistema:', err);
             setError('Ocurrió un error inesperado. Intente de nuevo más tarde.');
-        } finally {
             setIsLoading(false)
         }
     }
@@ -139,11 +142,20 @@ export const LoginForm = (): JSX.Element => {
                 <Button
                     type='submit'
                     className="bg-black text-white p-3 rounded-lg font-semibold hover:bg-gray-800 transition duration-200 cursor-pointer"
+                    disabled={isLoading || isRedirecting}
+                >
+                    {(isLoading || isRedirecting) && (<Spinner />)}
+                    {isRedirecting ? 'Redirigiendo...' : 'Ingresar'}
+                </Button>
+
+                {/* <Button
+                    type='submit'
+                    className="bg-black text-white p-3 rounded-lg font-semibold hover:bg-gray-800 transition duration-200 cursor-pointer"
                     disabled={isLoading}
                 >
                     {isLoading && (<Spinner />)}
                     Ingresar
-                </Button>
+                </Button> */}
 
                 {error && (
                     <p className="text-red-700 text-center text-xs">{error}</p>
