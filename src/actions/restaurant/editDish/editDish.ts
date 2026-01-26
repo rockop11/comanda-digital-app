@@ -14,7 +14,7 @@ const getBlobToken = () => {
         return process.env.BLOB_READ_WRITE_TOKEN_DEV_READ_WRITE_TOKEN;
     }
 
-    return process.env.BLOB_READ_WRITE_TOKEN_PROD;
+    return process.env.BLOB_READ_WRITE_TOKEN;
 }
 
 export async function editDish(
