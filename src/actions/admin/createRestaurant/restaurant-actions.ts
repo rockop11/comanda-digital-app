@@ -6,6 +6,7 @@ import { Role } from '@/generated/prisma/enums';
 import { Prisma } from '@/generated/prisma/client';
 import { put } from '@vercel/blob'
 import { revalidatePath } from 'next/cache';
+import { captureException } from '@sentry/nextjs';
 
 interface FormState {
     error?: string;
@@ -90,6 +91,17 @@ export async function createRestaurantAction(
 
     } catch (error) {
         console.error("Error al crear restaurante:", error);
+
+        captureException(error, {
+            tags: {
+                section: 'createRestaurantAction',
+                action: 'createRestaurant'
+            },
+            extra: {
+                categoryId: formData.get('categoryId'),
+                restaurantId: formData.get('restaurantId'),
+                timestamp: new Date().toISOString()}
+        })
 
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             if (error.code === 'P2002') {

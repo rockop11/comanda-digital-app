@@ -2,6 +2,7 @@
 import { JSX, useState, FormEvent, ChangeEvent } from "react"
 import { signIn, getSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
+import { captureException } from "@sentry/nextjs";
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { Spinner } from "../ui/spinner"
@@ -84,6 +85,16 @@ export const LoginForm = (): JSX.Element => {
                 }
             }
         } catch (err) {
+            captureException(err, {
+                tags: {
+                    section: 'loginForm',
+                    action: 'handleSubmit'
+                },
+                extra: {
+                    email: credentials.email,
+                    timestamp: new Date().toISOString()
+                }
+            })
             setError('Ocurrió un error inesperado. Intente de nuevo más tarde.');
             setIsLoading(false)
         }
