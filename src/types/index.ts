@@ -31,15 +31,11 @@ export interface Restaurant {
   id: number;
   slug: string;
   name: string;
-  image: string;
-  wifiId: number;
+  image: string | null;
+  wifiName: string | null;
+  wifiPass: string | null;
+  isActive: boolean;
 
-  wifi: {
-    id: number;
-    name: string;
-    password: string;
-    restaurantId: number | null;
-  };
   menuCategories: MenuCategory[];
   users: User[];
 }

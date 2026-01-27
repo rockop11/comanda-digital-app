@@ -3,7 +3,7 @@
 import { JSX, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useFormState, useFormStatus } from 'react-dom'
-import { createRestaurantAction } from '@/actions/admin/createRestaurant/restaurant-actions'
+import { createRestaurantAction } from '@/actions/admin/createRestaurant/createRestaurant'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Spinner } from '../ui/spinner'
