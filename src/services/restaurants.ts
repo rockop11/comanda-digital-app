@@ -1,21 +1,45 @@
 import { Prisma, Restaurant } from '@/generated/prisma/client';
 import { prisma } from '@/lib/prisma';
+import { captureServiceError } from '@/lib/sentry';
 
-export async function getRestaurantData(slug: string) {
+type RestaurantWithRelations = Prisma.RestaurantGetPayload<{
+    include: {
+        menuCategories: {
+            include: {
+                dishes: true
+            }
+        },
+        users: true
+    }
+}>;
+
+export async function getRestaurantData(
+    slug: string
+): Promise<RestaurantWithRelations | null> {
     if (!slug) return null;
 
-    const restaurant = await prisma.restaurant.findUnique({
-        where: { slug },
-        include: {
-            menuCategories: {
-                orderBy: { id: 'asc' },
-                include: { dishes: { orderBy: { name: 'asc' } } }
-            },
-            users: true,
-        }
-    })
+    try {
+        const restaurant = await prisma.restaurant.findUnique({
+            where: { slug },
+            include: {
+                menuCategories: {
+                    orderBy: { id: 'asc' },
+                    include: { dishes: { orderBy: { name: 'asc' } } }
+                },
+                users: true,
+            }
+        })
 
-    return restaurant;
+        return restaurant;
+    } catch (error) {
+        captureServiceError(error, {
+            service: 'getRestaurantData',
+            action: 'getRestaurantData',
+            page: 'RestaurantPage/slug'
+        });
+        console.error(`Error fetching restaurant with slug "${slug}":`, error);
+        return null;
+    }
 }
 
 export async function getRestaurantList(): Promise<Restaurant[]> {
@@ -24,7 +48,11 @@ export async function getRestaurantList(): Promise<Restaurant[]> {
 
         return restaurantList
     } catch (error) {
-        console.log({ error })
+        captureServiceError(error, {
+            service: 'Restaurants',
+            action: 'getRestaurantList',
+            page: 'AdminIndexPage'
+        })
 
         return []
     }
@@ -40,10 +68,11 @@ export type RestaurantPayload = Prisma.RestaurantGetPayload<{
     };
 }>;
 
-export async function getRestaurantDataByUser(userId: number): Promise<RestaurantPayload | null> {
+export async function getRestaurantDataByUser(
+    userId: number
+): Promise<RestaurantPayload | null> {
 
     if (!userId || isNaN(userId)) {
-        console.log('id invalido')
         return null
     }
 
@@ -74,6 +103,11 @@ export async function getRestaurantDataByUser(userId: number): Promise<Restauran
 
         return user.restaurant as RestaurantPayload
     } catch (error) {
+        captureServiceError(error, {
+            service: 'getRestaurantDataByUser',
+            action: 'getRestaurantDataByUser',
+            page: 'DashboardPage'
+        })
         return null
     }
 }

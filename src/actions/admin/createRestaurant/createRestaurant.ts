@@ -26,12 +26,6 @@ export async function createRestaurantAction(
     formData: FormData
 ): Promise<FormState> {
 
-    const blobToken = getBlobToken();
-
-    if (!blobToken) {
-        return { error: "Error de configuración: Falta el token de Blob para este entorno.", success: false };
-    }
-
     const name = formData.get('name') as string;
     const slug = formData.get('slug') as string;
     const file = formData.get('image') as File;
@@ -48,6 +42,20 @@ export async function createRestaurantAction(
     }
 
     try {
+
+        const searchRestaurantBySlug = await prisma.restaurant.findUnique({
+            where: {
+                slug: slug
+            }
+        })
+
+        if (searchRestaurantBySlug) {
+            return {
+                success: false,
+                error: 'Ya hay un restaurante con el mismo slug'
+            }
+        }
+
         const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
         const newRestaurant = await prisma.restaurant.create({
@@ -56,6 +64,7 @@ export async function createRestaurantAction(
                 name: name,
                 wifiName: wifiName,
                 wifiPass: wifiPassword,
+                isActive: true,
 
                 users: {
                     create: {
@@ -69,6 +78,16 @@ export async function createRestaurantAction(
         });
 
         if (file && file.size > 0) {
+
+            const blobToken = getBlobToken();
+
+            if (!blobToken) {
+                return {
+                    success: false,
+                    error: "Error de configuración: Falta el token de Blob para este entorno."
+                };
+            }
+
             const blobPath = `restaurants/${newRestaurant.id}/logo-${Date.now()}.${file.name.split('.').pop()}`;
 
             const { url: publicImageUrl } = await put(blobPath, file, {
@@ -100,7 +119,8 @@ export async function createRestaurantAction(
             extra: {
                 categoryId: formData.get('categoryId'),
                 restaurantId: formData.get('restaurantId'),
-                timestamp: new Date().toISOString()}
+                timestamp: new Date().toISOString()
+            }
         })
 
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
