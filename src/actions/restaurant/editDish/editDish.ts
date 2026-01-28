@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { put, del } from "@vercel/blob"
+import { captureServiceError } from "@/lib/sentry"
 
 export type EditDishState = {
     success: boolean;
@@ -79,28 +80,43 @@ export async function editDish(
 
 
         if (dishImage && dishImage.size > 0) {
-            const blobToken = getBlobToken()
+            try {
+                const blobToken = getBlobToken()
 
-            if (!blobToken) {
-                return {
-                    success: false,
-                    error: 'Token de almacenamiento no configurado'
+                if (!blobToken) {
+                    captureServiceError(new Error('Blob token not configured'), {
+                        service: 'createDish',
+                        action: 'BlobTokenMissing',
+                        level: 'warning',
+                        extra: { dishId: dishId }
+                    })
+                } else {
+                    const ext = dishImage.name.split('.').pop()
+                    const blobPath = `restaurants/${restaurantId}/dishes/${dishId}/image.${ext}`
+
+                    const { url } = await put(blobPath, dishImage, {
+                        access: 'public',
+                        token: blobToken,
+                        contentType: dishImage.type
+                    })
+
+                    data.image = url
+
+                    if (currentDish.image) {
+                        await del(currentDish.image)
+                    }
                 }
-            }
-
-            const ext = dishImage.name.split('.').pop()
-            const blobPath = `restaurants/${restaurantId}/dishes/${dishId}/image.${ext}`
-
-            const { url } = await put(blobPath, dishImage, {
-                access: 'public',
-                token: blobToken,
-                contentType: dishImage.type
-            })
-
-            data.image = url
-
-            if (currentDish.image) {
-                await del(currentDish.image)
+            } catch (blobError) {
+                captureServiceError(blobError, {
+                    level: 'warning',
+                    service: 'editDishService',
+                    action: 'editBlobImage',
+                    extra: {
+                        restaurantId,
+                        dishId,
+                        dishImage: dishImage.name
+                    }
+                })
             }
         }
 
@@ -116,6 +132,17 @@ export async function editDish(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'editDish',
+            action: 'editDishAction',
+            extra: {
+                restaurantId,
+                dishId,
+                dishName,
+                dishPrice
+            }
+        })
         return {
             success: false,
             error: 'Error del servidor'

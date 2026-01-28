@@ -1,6 +1,7 @@
 'use server'
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { captureServiceError } from "@/lib/sentry"
 
 export type EditRestaurantNameProps = {
     success: boolean,
@@ -39,6 +40,15 @@ export async function editRestaurantName(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'EditRestaurantName',
+            action: 'EditRestaurantNameAction',
+            extra: {
+                restaurantId,
+                restaurantName
+            }
+        })
         return {
             success: false,
             error: 'Error de servidor'

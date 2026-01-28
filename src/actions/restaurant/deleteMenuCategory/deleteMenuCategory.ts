@@ -1,6 +1,7 @@
 'use server'
 
 import { prisma } from "@/lib/prisma"
+import { captureServiceError } from "@/lib/sentry";
 import { revalidatePath } from "next/cache"
 
 export type DeleteCategoryState = {
@@ -42,6 +43,15 @@ export async function deleteMenuCategory(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'DeleteMenuCategory',
+            action: 'deleteMenuCategoryAction',
+            extra: {
+                restaurantId: restaurantId,
+                categoryId: categoryId
+            }
+        })
         return {
             success: false,
             error: 'Error de servidor'
