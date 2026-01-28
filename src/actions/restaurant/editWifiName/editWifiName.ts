@@ -1,6 +1,7 @@
 'use server'
 
 import { prisma } from "@/lib/prisma";
+import { captureServiceError } from "@/lib/sentry";
 import { revalidatePath } from "next/cache";
 
 export type EditWifiNameProps = {
@@ -36,6 +37,15 @@ export async function editWifiName(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'EditWifiName',
+            action: 'EditWifiNameAction',
+            extra: {
+                restaurantId,
+                wifiName
+            }
+        })
         return {
             success: false,
             error: 'Error de servidor'

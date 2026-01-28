@@ -1,5 +1,6 @@
 'use server'
 import { prisma } from "@/lib/prisma"
+import { captureServiceError } from "@/lib/sentry";
 import { revalidatePath } from "next/cache"
 
 export type EditWifiPassProps = {
@@ -35,6 +36,14 @@ export async function editWifiPass(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'EditWifiPass',
+            action: 'editWifiPassAction',
+            extra: {
+                restaurantId
+            }
+        })
         return {
             success: false,
             error: 'Error de servidor. Inténtalo de nuevo más tarde.'

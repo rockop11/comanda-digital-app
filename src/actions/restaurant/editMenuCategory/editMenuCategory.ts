@@ -1,6 +1,7 @@
 'use server'
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { captureServiceError } from "@/lib/sentry"
 
 export type EditCategoryState = {
     success: boolean,
@@ -24,22 +25,23 @@ export async function editMenuCategory(
     }
 
     try {
-        const result = await prisma.menuCategory.updateMany({
-            where: {
-                id: Number(categoryId),
-                restaurantId: Number(restaurantId),
-            },
-            data: {
-                category: categoryName,
-            },
+
+        const category = await prisma.menuCategory.findUnique({
+            where: { id: Number(categoryId) },
+            select: { restaurantId: true }
         })
 
-        if (result.count === 0) {
+        if (!category) {
             return {
                 success: false,
-                error: 'Categoría no encontrada o no autorizada'
+                error: 'Categoría no encontrada'
             }
         }
+
+        await prisma.menuCategory.update({
+            where: { id: Number(categoryId) },
+            data: { category: categoryName }
+        })
 
         revalidatePath('/dashboard')
 
@@ -48,6 +50,17 @@ export async function editMenuCategory(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'editMenuCategory',
+            action: 'EditCategoryAction',
+            extra: {
+                categoryId,
+                restaurantId,
+                categoryName
+            }
+        })
+
         return {
             success: false,
             error: 'Error de servidor'

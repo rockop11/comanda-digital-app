@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 
 interface SentryContext {
+    level?: 'error' | 'warning' | 'info';
     service?: string;
     action?: string;
     page?: string;
@@ -11,6 +12,7 @@ interface SentryContext {
 
 export function captureServiceError(error: unknown, context: SentryContext) {
     Sentry.captureException(error, {
+        level: context.level || 'error',
         tags: {
             type: 'service_error',
             service: context.service,

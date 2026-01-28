@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { captureException } from '@sentry/nextjs';
 
 export type CreateCategoryState = {
     success: boolean;
@@ -38,6 +39,17 @@ export async function createMenuCategoryAction(
         }
 
     } catch (error) {
+        captureException(error, {
+            tags: {
+                section: 'MenuCategory',
+                action: 'CreateMenuCategory'
+            },
+            extra: {
+                restaurantId: restaurantId,
+                categoryName: categoryName,
+                timestamp: new Date().toISOString()
+            }
+        })
 
         return {
             success: false,

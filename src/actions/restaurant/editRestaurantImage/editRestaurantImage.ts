@@ -1,5 +1,6 @@
 'use server'
 import { prisma } from "@/lib/prisma"
+import { captureServiceError } from "@/lib/sentry"
 import { put, del } from "@vercel/blob"
 import { revalidatePath } from "next/cache"
 
@@ -31,9 +32,8 @@ export async function editRestaurantImage(
         }
     }
 
-    const blobToken = getBlobToken()
-
     try {
+        const blobToken = getBlobToken()
 
         const restaurant = await prisma.restaurant.findUnique({
             where: {
@@ -72,6 +72,15 @@ export async function editRestaurantImage(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'editRestaurantImage',
+            action: 'editRestaurantImagenAction',
+            extra: {
+                restaurantId,
+                imageFile: imageFile.name
+            }
+        })
         return {
             success: false,
             error: 'Error al actualizar la imagen del restaurante'

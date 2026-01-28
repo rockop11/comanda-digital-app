@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
+import { captureServiceError } from "@/lib/sentry";
 
 export type CreateDishState = {
     success: boolean;
@@ -65,28 +66,45 @@ export async function createDish(
         })
 
         if (dishImage && dishImage.size > 0) {
-            const blobToken = getBlobToken()
+            try {
+                const blobToken = getBlobToken()
 
-            if (!blobToken) {
-                return {
-                    success: false,
-                    error: 'Token de almacenamiento no configurado'
+                if (!blobToken) {
+                    captureServiceError(new Error('Blob token not configured'), {
+                        service: 'createDish',
+                        action: 'BlobTokenMissing',
+                        level: 'warning',
+                        extra: { dishId: newDish.id }
+                    })
+                } else {
+                    const ext = dishImage.name.split('.').pop()
+                    const blobPath = `restaurants/${restaurantId}/dishes/${newDish.id}/image.${ext}`
+
+                    const { url } = await put(blobPath, dishImage, {
+                        access: 'public',
+                        token: blobToken,
+                        contentType: dishImage.type
+                    })
+
+                    await prisma.dish.update({
+                        where: { id: newDish.id },
+                        data: { image: url }
+                    })
                 }
+            } catch (blobError) {
+                captureServiceError(blobError, {
+                    service: 'createDish',
+                    action: 'UploadBlobImage',
+                    level: 'warning',
+                    extra: {
+                        dishId: newDish.id,
+                        restaurantId,
+                        fileName: dishImage.name
+                    }
+                })
+
+                console.error('Error al subir imagen:', blobError)
             }
-
-            const ext = dishImage.name.split('.').pop()
-            const blobPath = `restaurants/${restaurantId}/dishes/${newDish.id}/image.${ext}`
-
-            const { url } = await put(blobPath, dishImage, {
-                access: 'public',
-                token: blobToken,
-                contentType: dishImage.type
-            })
-
-            await prisma.dish.update({
-                where: { id: newDish.id },
-                data: { image: url }
-            })
         }
 
         revalidatePath('/dashboard')
@@ -97,6 +115,17 @@ export async function createDish(
         }
 
     } catch (error) {
+        captureServiceError(error, {
+            service: 'createDish',
+            action: 'CreateDishAction',
+            extra: {
+                restaurantId: restaurantId,
+                categoryId: categoryId,
+                dishTitle: dishTitle,
+                dishPrice: dishPrice
+            }
+        })
+
         return {
             success: false,
             error: 'Error del servidor'

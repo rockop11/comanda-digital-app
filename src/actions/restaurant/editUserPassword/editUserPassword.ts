@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
+import { captureServiceError } from "@/lib/sentry";
 
 export type EditUserPasswordProps = {
     success: boolean;
@@ -73,6 +74,14 @@ export async function editUserPassword(
             error: null
         }
     } catch (error) {
+        captureServiceError(error, {
+            level: 'error',
+            service: 'EditUserPassword',
+            action: 'EditUserPasswordAction',
+            extra: {
+                userId
+            }
+        })
         return {
             success: false,
             error: 'Error del servidor, intenta nuevamente más tarde*'
