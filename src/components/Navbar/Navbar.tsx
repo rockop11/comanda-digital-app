@@ -1,16 +1,18 @@
 'use client'
 import type { Session } from "next-auth";
 import { useState, useEffect } from "react";
+import Link from 'next/link'
 import { signOut } from "next-auth/react"
 import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
 import { ChangePasswordModal } from "../ChangePasswordModal/ChangePasswordModal";
-import { LogOut, Lock } from 'lucide-react';
+import { LogOut, Lock, ExternalLink } from 'lucide-react';
 
 interface NavbarProps {
     session: Session | null
+    slug: string
 }
 
-export const Navbar = ({ session }: NavbarProps) => {
+export const Navbar = ({ session, slug }: NavbarProps) => {
 
     const [openModal, setOpenModal] = useState<boolean>(false)
 
@@ -42,9 +44,19 @@ export const Navbar = ({ session }: NavbarProps) => {
             )}
 
             <nav className="max-w-3xl mx-auto flex justify-between items-center px-4 my-4">
-                <p>Bienvenido: {user.name}</p>
+                <p>Bienvenido: <span className="font-bold">{user.name}</span></p>
 
                 <div className=" flex gap-4">
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <Link href={`/restaurant/${slug}`}>
+                                <ExternalLink size={18} className="cursor-pointer" />
+                            </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            Ver Menú
+                        </TooltipContent>
+                    </Tooltip>
                     <Tooltip>
                         <TooltipTrigger>
                             <Lock
