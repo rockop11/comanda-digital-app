@@ -3,25 +3,12 @@ import { notFound } from "next/navigation";
 import { getRestaurantData } from "@/services/restaurants";
 import { RestaurantHeader } from "@/components/RestaurantHeader/RestaurantHeader";
 import { RestaurantMenu } from "@/components/RestaurantMenu/RestaurantMenu";
-import { prisma } from "@/lib/prisma";
 
-export const dynamicParams = true;
+export const dynamic = 'force-dynamic'
 interface RestaurantPageProps {
     params: {
         slug: string;
     }
-}
-
-export async function generateStaticParams() {
-    const restaurants = await prisma.restaurant.findMany({
-        select: {
-            slug: true,
-        },
-    });
-
-    return restaurants.map((restaurant) => ({
-        slug: restaurant.slug,
-    }));
 }
 
 export async function generateMetadata({ params }: RestaurantPageProps): Promise<Metadata> {
