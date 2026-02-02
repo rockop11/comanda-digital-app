@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
+    "@emailjs/browser": "^4.4.1",
     "@prisma/adapter-pg": "^7.1.0",
     "@prisma/client": "^7.1.0",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -25,6 +26,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
+    "emailjs": "^5.0.0",
     "lucide-react": "^0.555.0",
     "next": "^14.2.3",
     "next-auth": "^4.24.13",
