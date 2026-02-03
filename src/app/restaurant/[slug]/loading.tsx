@@ -1,5 +1,5 @@
-import { RestaurantHeaderSkeleton } from "@/components/Skeletons/RestaurantHeaderSkeleton"
-import { RestaurantMenuSkeleton } from '@/components/Skeletons/RestaurantMenuSkeleton';
+import { RestaurantHeaderSkeleton } from "@/components/Dashboard/Skeletons/RestaurantHeaderSkeleton"
+import { RestaurantMenuSkeleton } from '@/components/Dashboard/Skeletons/RestaurantMenuSkeleton';
 
 export default function Loading() {
     return (

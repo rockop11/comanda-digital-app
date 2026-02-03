@@ -1,4 +1,4 @@
-import { RestaurantAdminPage } from '@/components/RestaurantAdminPage/RestaurantAdminPage';
+import { RestaurantAdminPage } from '@/components/Dashboard';
 import { getRestaurantDataByUser } from '@/services/restaurants';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';

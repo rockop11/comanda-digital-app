@@ -1,6 +1,6 @@
 
-import { SuperAdminPage } from "@/components/SuperAdminPage/SuperAdminPage"
 import { getRestaurantList } from "@/services/restaurants"
+import { SuperAdminPage } from "@/components/Dashboard"
 
 export const dynamic = 'force-dynamic'
 

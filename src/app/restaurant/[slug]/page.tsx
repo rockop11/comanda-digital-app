@@ -1,8 +1,7 @@
 import type { Metadata } from "next/types";
 import { notFound } from "next/navigation";
 import { getRestaurantData } from "@/services/restaurants";
-import { RestaurantHeader } from "@/components/RestaurantHeader/RestaurantHeader";
-import { RestaurantMenu } from "@/components/RestaurantMenu/RestaurantMenu";
+import { RestaurantHeader, RestaurantMenu } from "@/components/Dashboard";
 
 export const dynamic = 'force-dynamic'
 interface RestaurantPageProps {

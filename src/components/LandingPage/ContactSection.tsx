@@ -1,5 +1,5 @@
 import { JSX } from "react"
-import { ContactForm } from "../ContactForm/ContactForm"
+import { ContactForm } from "@/components/LandingPage"
 
 export const ContactSection = (): JSX.Element => {
   return (
