@@ -1,6 +1,8 @@
-import { NavbarSkeleton } from "@/components/Skeletons/NavbarSkeleton"
-import { RestaurantHeaderSkeleton } from "@/components/Skeletons/RestaurantHeaderSkeleton"
-import { RestaurantMenuSkeleton } from "@/components/Skeletons/RestaurantMenuSkeleton"
+import {
+    NavbarSkeleton,
+    RestaurantHeaderSkeleton,
+    RestaurantMenuSkeleton
+} from "@/components/Dashboard";
 
 export default function Loading() {
     return (

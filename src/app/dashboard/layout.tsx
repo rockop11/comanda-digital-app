@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import { Navbar } from "@/components/Navbar/Navbar"
+import { Navbar } from "@/components/Dashboard"
 import { getRestaurantDataByUser } from "@/services/restaurants"
 
 export default async function DashboardLayout({

@@ -1,4 +1,4 @@
-import { CreateRestaurantForm } from "@/components/CreateRestaurantForm/CreateRestaurantForm"
+import { CreateRestaurantForm } from "@/components/Dashboard"
 
 export default async function CreateRestaurantPage() {
     return (
