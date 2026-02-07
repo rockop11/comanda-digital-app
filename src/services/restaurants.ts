@@ -44,7 +44,11 @@ export async function getRestaurantData(
 
 export async function getRestaurantList(): Promise<Restaurant[]> {
     try {
-        const restaurantList = await prisma.restaurant.findMany()
+        const restaurantList = await prisma.restaurant.findMany({
+            orderBy: {
+                id: 'asc'
+            }
+        })
 
         return restaurantList
     } catch (error) {
