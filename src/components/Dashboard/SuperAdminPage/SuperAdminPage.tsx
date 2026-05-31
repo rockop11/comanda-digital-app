@@ -139,7 +139,7 @@ export const SuperAdminPage = ({ restaurants }: AdminPageProps): JSX.Element => 
                         </div>
                     </div>
                 ))}
-            </div >
+            </div>
         </>
     )
 }
