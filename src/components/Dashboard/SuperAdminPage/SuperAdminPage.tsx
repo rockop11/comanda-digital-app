@@ -1,6 +1,6 @@
 "use client"
 import type { Restaurant } from "@/generated/prisma/client"
-import { JSX } from "react"
+import { JSX, useState } from "react"
 import { toggleActivationRestaurant } from "@/actions/admin/toggleActivationRestaurant/toggleActivationRestaurant"
 import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { toast } from 'react-hot-toast'
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { captureServiceError } from "@/lib/sentry"
 
 interface AdminPageProps {
     restaurants: Restaurant[]
@@ -18,14 +19,16 @@ interface AdminPageProps {
 export const SuperAdminPage = ({ restaurants }: AdminPageProps): JSX.Element => {
     const { data: session, status } = useSession()
     const router = useRouter()
-
-    if (status === 'loading') {
-        return <div>Cargando...</div>
-    }
+    const [loadingIds, setLoadingIds] = useState(new Set());
 
     const userName = session?.user?.name
 
-    const toggleActivationRestaurantHandler = async (restaurantId: number, currentActive: boolean, restaurantName: string) => {
+    const toggleActivationRestaurantHandler = async (
+        restaurantId: number,
+        currentActive: boolean,
+        restaurantName: string
+    ) => {
+        setLoadingIds(prev => new Set(prev).add(restaurantId));
         const newActiveState = !currentActive
         try {
             const result = await toggleActivationRestaurant(restaurantId, newActiveState)
@@ -42,8 +45,27 @@ export const SuperAdminPage = ({ restaurants }: AdminPageProps): JSX.Element => 
                 })
             }
         } catch (error) {
-            console.log(error)
+            captureServiceError(error, {
+                service: 'ToggleRestaurantActivation',
+                action: 'toggleActivationRestaurant',
+                level: 'warning',
+                extra: {
+                    restaurantId,
+                    currentActive,
+                    restaurantName
+                }
+            })
+        } finally {
+            setLoadingIds(prev => {
+                const next = new Set(prev);
+                next.delete(restaurantId);
+                return next;
+            });
         }
+    }
+
+    if (status === 'loading') {
+        return <div>Cargando...</div>
     }
 
     return (
@@ -108,15 +130,16 @@ export const SuperAdminPage = ({ restaurants }: AdminPageProps): JSX.Element => 
 
 
                                 <Switch
-                                    className="scale-90 md:scale-100"
+                                    className="scale-90 md:scale-100 cursor-pointer"
                                     checked={isActive}
                                     onCheckedChange={() => toggleActivationRestaurantHandler(id, isActive, name)}
+                                    disabled={loadingIds.has(id)}
                                 />
                             </div>
                         </div>
                     </div>
                 ))}
-            </div >
+            </div>
         </>
     )
 }
